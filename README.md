@@ -16,7 +16,7 @@ the only thing this needs in the Revit.exe.config file's //runtime//assemblyBind
       </dependentAssembly>
 ~~~
 
-we keep the various class libraries separated to:
+we keep the various class library projects separated to:
 
 1) accomodate cloud based routing engines such as BIMrx Marconi
 1) get arround Revit 2020 not liking Newtonsoft.Json past version 9.0.1 - OWIN pulls Newtonsoft 6.0.1. so it's not so bad. But GraphQL is needy and wants 10.0.1. at the least.
