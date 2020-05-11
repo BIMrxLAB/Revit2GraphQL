@@ -38,8 +38,3 @@ here's an .addin file to get this loaded:
 ~~~
 
 
-Thanks Jeremy Tammik (aka The Building Coder) - who has helped Revit folks get around CS red-tape for a long, long time.
-
-Thanks Ian Keough / the Hypar gang - who can explain to AECO folks why open source matters. https://youtu.be/wigb6X1b9Hw
-
-Thanks Miroslav Radojević - who dumbed OWIN down so duct tape coders could get past middleware. https://braincadet.com/category/c-sharp/
