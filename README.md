@@ -36,3 +36,12 @@ here's an .addin file to get this loaded:
   </AddIn>
 </RevitAddIns>
 ~~~
+
+
+We would like to thank the academy.
+
+And Jeremy Tammik (aka The Building Coder) - who has helped folks get around CS red-tape for a long, long time.
+
+And Ian Keough - who can explain to AECO folks why open source matters. https://youtu.be/wigb6X1b9Hw
+
+And Miroslav Radojević - who dumbed OWIN down so duct tape coders could get past middleware. https://braincadet.com/category/c-sharp/
