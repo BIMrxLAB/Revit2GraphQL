@@ -17,6 +17,22 @@ namespace RevitGraphQLResolver.GraphQl
         {
             this._schema = Schema.For(@"
             
+            type QLFamilyCategory {
+                name: String,
+                qlFamilies(nameFilter: [String]): [QLFamily]
+            }
+
+            type QLFamily {
+                id: String,
+                name: String,
+                qlFamilySymbols(nameFilter: [String]): [QLFamilySymbol]
+            }
+
+            type QLFamilySymbol {
+                id: String,
+                name: String
+            }
+
             type Query {
                 hello: String
             }
@@ -26,7 +42,15 @@ namespace RevitGraphQLResolver.GraphQl
             }
 
             type Query {
-                families: [String]
+                schedules: [String]
+            }
+
+            type Query {
+                qlFamilyCategories(nameFilter: [String]): [QLFamilyCategory]
+            }
+
+            type Query {
+                qlFamilies(nameFilter: [String]): [QLFamily]
             }
 
             ", _ =>
