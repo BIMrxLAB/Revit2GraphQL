@@ -18,6 +18,9 @@ namespace RevitCommand
             WebServer aWebServer = new WebServer("localhost", "9000", doc);
             aWebServer.Start();
 
+
+            TaskDialog.Show("GraphQL for Revit", "Press OK to stop GraphQL endpoint.");
+
             return Result.Succeeded;
 
         }
