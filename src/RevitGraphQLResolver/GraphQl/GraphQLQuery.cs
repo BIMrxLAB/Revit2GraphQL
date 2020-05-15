@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 
-namespace RevitGraphQLResolver.GraphQl
+namespace RevitGraphQLResolver.GraphQL
 {
     public class GraphQLQuery
     {

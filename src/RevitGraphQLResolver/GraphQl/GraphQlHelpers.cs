@@ -3,7 +3,7 @@ using GraphQL.Types;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace RevitGraphQLResolver.GraphQl
+namespace RevitGraphQLResolver.GraphQL
 {
     public static class GraphQlHelpers
     {

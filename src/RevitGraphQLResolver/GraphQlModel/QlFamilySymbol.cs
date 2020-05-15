@@ -1,20 +1,13 @@
 ﻿using Autodesk.Revit.DB;
-using GraphQL.Language.AST;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using RevitGraphQLSchema.IGraphQLModel;
 
 namespace RevitGraphQLResolver.GraphQLModel
 {
-    public class QLFamilySymbol
+    public class QLFamilySymbol:IQLFamilySymbol 
     {
         public string id { get; set; }
         public string name { get; set; }
-
-        public QLFamilySymbol()
-        {
-
-        }
+        
         public QLFamilySymbol(FamilySymbol _familySymbol)
         {
             id = _familySymbol.Id.ToString();

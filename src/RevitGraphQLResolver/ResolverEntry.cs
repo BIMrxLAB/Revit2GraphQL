@@ -2,7 +2,7 @@
 using GraphQL;
 using GraphQL.Instrumentation;
 using Newtonsoft.Json.Linq;
-using RevitGraphQLResolver.GraphQl;
+using RevitGraphQLResolver.GraphQL;
 using System;
 using System.Threading.Tasks;
 

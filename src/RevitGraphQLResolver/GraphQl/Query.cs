@@ -1,16 +1,17 @@
 ﻿using Autodesk.Revit.DB;
 using GraphQL;
 using GraphQL.Types;
-using Newtonsoft.Json.Linq;
 using RevitGraphQLResolver.GraphQLModel;
+using RevitGraphQLSchema.IGraphQl;
+using RevitGraphQLSchema.IGraphQLModel;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RevitGraphQLResolver.GraphQl
+namespace RevitGraphQLResolver.GraphQL
 {
-    public class Query : ObjectGraphType
+    public class Query : ObjectGraphType, IQuery
     {
 
 
@@ -21,7 +22,7 @@ namespace RevitGraphQLResolver.GraphQl
         }
 
         [GraphQLMetadata("sheets")]
-        public List<string> GetSheets(ResolveFieldContext context)
+        public Task<List<string>> GetSheetsAsync(ResolveFieldContext context)
         {
             Document _doc = ResolverEntry.Doc;
 
@@ -31,12 +32,12 @@ namespace RevitGraphQLResolver.GraphQl
 
             var stringList = sheetList.Select(x => x.Name).OrderBy(x => x).ToList();
 
-            return stringList;
+            return Task.FromResult(stringList);
         }
 
         //https://thebuildingcoder.typepad.com/blog/2012/05/the-schedule-api-and-access-to-schedule-data.html
         [GraphQLMetadata("schedules")]
-        public List<string> GetSchedules(ResolveFieldContext context)
+        public Task<List<string>> GetSchedulesAsync(ResolveFieldContext context)
         {
             Document _doc = ResolverEntry.Doc;
 
@@ -46,11 +47,11 @@ namespace RevitGraphQLResolver.GraphQl
 
             var stringList = scheduleList.Select(x => x.Name).OrderBy(x => x).ToList();
 
-            return stringList;
+            return Task.FromResult(stringList);
         }
 
         [GraphQLMetadata("qlFamilies")]
-        public List<QLFamily> GetFamilies(ResolveFieldContext context, string[] nameFilter = null)
+        public Task<List<IQLFamily>> GetFamiliesAsync(ResolveFieldContext context, string[] nameFilter = null)
         {
 
             Document _doc = ResolverEntry.Doc;
@@ -60,7 +61,7 @@ namespace RevitGraphQLResolver.GraphQl
             var nameFilterStrings = nameFilter != null ? nameFilter.ToList() : new List<string>();
             var qlFamilySymbolsField = GraphQlHelpers.GetFieldFromContext(context, "qlFamilySymbols");
 
-            var returnObject = new ConcurrentBag<QLFamily>();
+            var returnObject = new ConcurrentBag<IQLFamily>();
 
             Parallel.ForEach(objectList, aFamily =>
             {
@@ -70,12 +71,12 @@ namespace RevitGraphQLResolver.GraphQl
                     returnObject.Add(qlFamily);
                 }
             });
-            return returnObject.OrderBy(x => x.name).ToList();
+            return Task.FromResult(returnObject.OrderBy(x => x.name).ToList());
 
         }
 
         [GraphQLMetadata("qlFamilyCategories")]
-        public List<QLFamilyCategory> GetCategories(ResolveFieldContext context, string[] nameFilter = null)
+        public Task<List<IQLFamilyCategory>> GetCategoriesAsync(ResolveFieldContext context, string[] nameFilter = null)
         {
 
             Document _doc = ResolverEntry.Doc;
@@ -86,7 +87,7 @@ namespace RevitGraphQLResolver.GraphQl
             var nameFilterStrings = nameFilter != null ? nameFilter.ToList() : new List<string>();
             var qlFamiliesField = GraphQlHelpers.GetFieldFromContext(context, "qlFamilies");
 
-            var returnObject = new ConcurrentBag<QLFamilyCategory>();
+            var returnObject = new ConcurrentBag<IQLFamilyCategory>();
 
             Parallel.ForEach(stringList, aFamilyCategoryName =>
             {
@@ -96,7 +97,7 @@ namespace RevitGraphQLResolver.GraphQl
                     returnObject.Add(qlFamilyCategory);
                 }
             });
-            return returnObject.OrderBy(x => x.name).ToList();
+            return Task.FromResult(returnObject.OrderBy(x => x.name).ToList());
 
         }
 

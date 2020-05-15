@@ -5,7 +5,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="GraphQLModel\IQLFamily.cs" />
+    <Compile Remove="GraphQLModel\IQLFamilyCategory.cs" />
+    <Compile Remove="GraphQLModel\IQLFamilySymbol.cs" />
+    <Compile Remove="GraphQL\IQuery.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="GraphQL" Version="2.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RevitGraphQLSchema\RevitGraphQLSchema.csproj" />
   </ItemGroup>
 
   <ItemGroup>

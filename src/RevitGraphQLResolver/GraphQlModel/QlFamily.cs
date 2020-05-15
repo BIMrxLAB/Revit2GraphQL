@@ -1,20 +1,19 @@
 ﻿using Autodesk.Revit.DB;
 using GraphQL.Language.AST;
-using RevitGraphQLResolver.GraphQl;
-using System;
+using RevitGraphQLResolver.GraphQL;
+using RevitGraphQLSchema.IGraphQLModel;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RevitGraphQLResolver.GraphQLModel
 {
-    public class QLFamily
+    public class QLFamily : IQLFamily
     {
         public string id { get; set; }
         public string name { get; set; }
-        public List<QLFamilySymbol> qlFamilySymbols { get; set; }
+        public List<IQLFamilySymbol> qlFamilySymbols { get; set; }
 
         public QLFamily()
         {
@@ -25,9 +24,9 @@ namespace RevitGraphQLResolver.GraphQLModel
             id = _family.Id.ToString();
             name = _family.Name;
 
-            if(queryFieldForFamilySymbols != null)
+            if (queryFieldForFamilySymbols != null)
             {
-                var returnElementsObject = new ConcurrentBag<QLFamilySymbol>();
+                var returnElementsObject = new ConcurrentBag<IQLFamilySymbol>();
 
                 var nameFiltersContained = GraphQlHelpers.GetArgumentStrings(queryFieldForFamilySymbols, "nameFilter");
 

@@ -1,6 +1,6 @@
 ﻿using GraphQL.Types;
 
-namespace RevitGraphQLResolver.GraphQl
+namespace RevitGraphQLResolver.GraphQL
 {
     public class MySchema
     {
@@ -15,45 +15,7 @@ namespace RevitGraphQLResolver.GraphQl
 
         public MySchema()
         {
-            this._schema = Schema.For(@"
-            
-            type QLFamilyCategory {
-                name: String,
-                qlFamilies(nameFilter: [String]): [QLFamily]
-            }
-
-            type QLFamily {
-                id: String,
-                name: String,
-                qlFamilySymbols(nameFilter: [String]): [QLFamilySymbol]
-            }
-
-            type QLFamilySymbol {
-                id: String,
-                name: String
-            }
-
-            type Query {
-                hello: String
-            }
-
-            type Query {
-                sheets: [String]
-            }
-
-            type Query {
-                schedules: [String]
-            }
-
-            type Query {
-                qlFamilyCategories(nameFilter: [String]): [QLFamilyCategory]
-            }
-
-            type Query {
-                qlFamilies(nameFilter: [String]): [QLFamily]
-            }
-
-            ", _ =>
+            this._schema = Schema.For(RevitGraphQLSchema.GraphQLSchema.schema, _ =>
                 {
                     _.Types.Include<Query>();
                 });
