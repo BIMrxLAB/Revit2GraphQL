@@ -35,13 +35,14 @@ namespace RevitGraphQLResolver.GraphQLModel
                 var _doc = ResolverEntry.Doc;
                 List<Family> objectList = new FilteredElementCollector(_doc).OfClass(typeof(Family)).Select(x => (x as Family)).Where(x => x.FamilyCategory.Name == name).ToList();
 
-                Parallel.ForEach(objectList, x =>
+                //Parallel.ForEach(objectList, x =>
+                foreach(var x in objectList)
                 {
                     if (nameFiltersContained.Count == 0 || nameFiltersContained.Contains(x.Name))
                     {
                         returnElementsObject.Add(new QLFamily(x, queryFieldForFamilySymbols));
                     }
-                });
+                }
 
 
 

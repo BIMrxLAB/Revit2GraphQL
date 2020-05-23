@@ -63,14 +63,15 @@ namespace RevitGraphQLResolver.GraphQL
 
             var returnObject = new ConcurrentBag<IQLFamily>();
 
-            Parallel.ForEach(objectList, aFamily =>
+            //Parallel.ForEach(objectList, aFamily =>
+            foreach(var aFamily in objectList)
             {
                 if (nameFilterStrings.Count == 0 || nameFilterStrings.Contains(aFamily.Name))
                 {
                     var qlFamily = new QLFamily(aFamily, qlFamilySymbolsField);
                     returnObject.Add(qlFamily);
                 }
-            });
+            }
             return Task.FromResult(returnObject.OrderBy(x => x.name).ToList());
 
         }
@@ -89,14 +90,15 @@ namespace RevitGraphQLResolver.GraphQL
 
             var returnObject = new ConcurrentBag<IQLFamilyCategory>();
 
-            Parallel.ForEach(stringList, aFamilyCategoryName =>
+            //Parallel.ForEach(stringList, aFamilyCategoryName =>
+            foreach(var aFamilyCategoryName in stringList)
             {
                 if (nameFilterStrings.Count == 0 || nameFilterStrings.Contains(aFamilyCategoryName))
                 {
                     var qlFamilyCategory = new QLFamilyCategory(aFamilyCategoryName, qlFamiliesField);
                     returnObject.Add(qlFamilyCategory);
                 }
-            });
+            }
             return Task.FromResult(returnObject.OrderBy(x => x.name).ToList());
 
         }
