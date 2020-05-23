@@ -17,7 +17,11 @@ namespace RevitWebServer
 
         public static string BaseUrl = string.Format("http://{0}:{1}/", Host, Port);
 
+        public static bool isBusy = false;
+
         public static Document Doc;
+
+        private IDisposable _server = null;
 
         public WebServer(string _host, string _port, Document _doc)
         {
@@ -29,8 +33,15 @@ namespace RevitWebServer
         }
         public void Start()
         {
-            WebApp.Start<Startup>(BaseUrl);
+            _server = WebApp.Start<Startup>(BaseUrl);
         }
 
+        public void Stop()
+        {
+            if(_server!=null)
+            {
+                _server.Dispose();
+            }
+        }
     }
 }
