@@ -1,32 +1,28 @@
 ﻿using Autodesk.Revit.DB;
 using GraphQL.Language.AST;
 using RevitGraphQLResolver.GraphQL;
-using RevitGraphQLSchema.IGraphQLModel;
+using RevitGraphQLSchema.GraphQLModel;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace RevitGraphQLResolver.GraphQLModel
 {
-    public class QLFamily : IQLFamily
+    public class QLFamilyResolve : QLFamily
     {
-        public string id { get; set; }
-        public string name { get; set; }
-        public List<IQLFamilySymbol> qlFamilySymbols { get; set; }
 
-        public QLFamily()
+        public QLFamilyResolve()
         {
 
         }
-        public QLFamily(Family _family, Field queryFieldForFamilySymbols)
+        public QLFamilyResolve(Family _family, Field queryFieldForFamilySymbols)
         {
             id = _family.Id.ToString();
             name = _family.Name;
 
             if (queryFieldForFamilySymbols != null)
             {
-                var returnElementsObject = new ConcurrentBag<IQLFamilySymbol>();
+                var returnElementsObject = new ConcurrentBag<QLFamilySymbol>();
 
                 var nameFiltersContained = GraphQlHelpers.GetArgumentStrings(queryFieldForFamilySymbols, "nameFilter");
 
@@ -39,7 +35,7 @@ namespace RevitGraphQLResolver.GraphQLModel
                 {
                     if (nameFiltersContained.Count == 0 || nameFiltersContained.Contains(x.Name))
                     {
-                        returnElementsObject.Add(new QLFamilySymbol(x));
+                        returnElementsObject.Add(new QLFamilySymbolResolve(x));
                     }
                 }
 

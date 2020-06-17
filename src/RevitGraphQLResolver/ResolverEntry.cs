@@ -17,11 +17,11 @@ namespace RevitGraphQLResolver
             Doc = _doc;
         }
 
-        public async Task<object> GetResultAsync(JObject queryObject)
+        public async Task<object> GetResultAsync(JObject queryJObject)
         {
             var start = DateTime.UtcNow;
 
-            GraphQLQuery query = queryObject.ToObject<GraphQLQuery>();
+            GraphQLQuery query = queryJObject.ToObject<GraphQLQuery>();
 
             var inputs = query.Variables.ToInputs();
 

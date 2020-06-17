@@ -2,12 +2,11 @@
 using GraphQL;
 using GraphQL.Types;
 using RevitGraphQLResolver.GraphQLModel;
+using RevitGraphQLSchema.GraphQLModel;
 using RevitGraphQLSchema.IGraphQl;
-using RevitGraphQLSchema.IGraphQLModel;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace RevitGraphQLResolver.GraphQL
 {
@@ -22,7 +21,7 @@ namespace RevitGraphQLResolver.GraphQL
         }
 
         [GraphQLMetadata("sheets")]
-        public Task<List<string>> GetSheetsAsync(ResolveFieldContext context)
+        public List<string> GetSheets(ResolveFieldContext context)
         {
             Document _doc = ResolverEntry.Doc;
 
@@ -32,12 +31,12 @@ namespace RevitGraphQLResolver.GraphQL
 
             var stringList = sheetList.Select(x => x.Name).OrderBy(x => x).ToList();
 
-            return Task.FromResult(stringList);
+            return stringList;
         }
 
         //https://thebuildingcoder.typepad.com/blog/2012/05/the-schedule-api-and-access-to-schedule-data.html
         [GraphQLMetadata("schedules")]
-        public Task<List<string>> GetSchedulesAsync(ResolveFieldContext context)
+        public List<string> GetSchedules(ResolveFieldContext context)
         {
             Document _doc = ResolverEntry.Doc;
 
@@ -47,11 +46,11 @@ namespace RevitGraphQLResolver.GraphQL
 
             var stringList = scheduleList.Select(x => x.Name).OrderBy(x => x).ToList();
 
-            return Task.FromResult(stringList);
+            return stringList;
         }
 
         [GraphQLMetadata("qlFamilies")]
-        public Task<List<IQLFamily>> GetFamiliesAsync(ResolveFieldContext context, string[] nameFilter = null)
+        public List<QLFamily> GetFamilies(ResolveFieldContext context, string[] nameFilter = null)
         {
 
             Document _doc = ResolverEntry.Doc;
@@ -61,23 +60,23 @@ namespace RevitGraphQLResolver.GraphQL
             var nameFilterStrings = nameFilter != null ? nameFilter.ToList() : new List<string>();
             var qlFamilySymbolsField = GraphQlHelpers.GetFieldFromContext(context, "qlFamilySymbols");
 
-            var returnObject = new ConcurrentBag<IQLFamily>();
+            var returnObject = new ConcurrentBag<QLFamily>();
 
             //Parallel.ForEach(objectList, aFamily =>
             foreach(var aFamily in objectList)
             {
                 if (nameFilterStrings.Count == 0 || nameFilterStrings.Contains(aFamily.Name))
                 {
-                    var qlFamily = new QLFamily(aFamily, qlFamilySymbolsField);
+                    var qlFamily = new QLFamilyResolve(aFamily, qlFamilySymbolsField);
                     returnObject.Add(qlFamily);
                 }
             }
-            return Task.FromResult(returnObject.OrderBy(x => x.name).ToList());
+            return returnObject.OrderBy(x => x.name).ToList();
 
         }
 
         [GraphQLMetadata("qlFamilyCategories")]
-        public Task<List<IQLFamilyCategory>> GetCategoriesAsync(ResolveFieldContext context, string[] nameFilter = null)
+        public List<QLFamilyCategory> GetCategories(ResolveFieldContext context, string[] nameFilter = null)
         {
 
             Document _doc = ResolverEntry.Doc;
@@ -88,18 +87,18 @@ namespace RevitGraphQLResolver.GraphQL
             var nameFilterStrings = nameFilter != null ? nameFilter.ToList() : new List<string>();
             var qlFamiliesField = GraphQlHelpers.GetFieldFromContext(context, "qlFamilies");
 
-            var returnObject = new ConcurrentBag<IQLFamilyCategory>();
+            var returnObject = new ConcurrentBag<QLFamilyCategory>();
 
             //Parallel.ForEach(stringList, aFamilyCategoryName =>
             foreach(var aFamilyCategoryName in stringList)
             {
                 if (nameFilterStrings.Count == 0 || nameFilterStrings.Contains(aFamilyCategoryName))
                 {
-                    var qlFamilyCategory = new QLFamilyCategory(aFamilyCategoryName, qlFamiliesField);
+                    var qlFamilyCategory = new QLFamilyCategoryResolve(aFamilyCategoryName, qlFamiliesField);
                     returnObject.Add(qlFamilyCategory);
                 }
             }
-            return Task.FromResult(returnObject.OrderBy(x => x.name).ToList());
+            return returnObject.OrderBy(x => x.name).ToList();
 
         }
 
