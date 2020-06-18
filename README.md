@@ -26,11 +26,11 @@ here's an .addin file to get this loaded:
 ~~~ XML
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <RevitAddIns>
-  <AddIn Type="Command">
+  <AddIn Type="Application">
     <Name>Revit GraphQL Server</Name>
     <Assembly>"C:\Users\xyz\Source\Repos\Revit2GraphQL\src\RevitCommand\bin\Debug\RevitCommand.dll"</Assembly>
     <AddInId>73dc677a-5a96-41dd-b3be-ca81d06dfc2c</AddInId>
-    <FullClassName>RevitCommand.Entry</FullClassName>
+    <FullClassName>RevitCommand.App</FullClassName>
     <VendorId>DynamoChild</VendorId>
     <VendorDescription>https://children.dynamo.com/Got2GoSocial</VendorDescription>
   </AddIn>
