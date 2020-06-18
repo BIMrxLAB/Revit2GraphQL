@@ -4,9 +4,11 @@ using GraphQL.Types;
 using RevitGraphQLResolver.GraphQLModel;
 using RevitGraphQLSchema.GraphQLModel;
 using RevitGraphQLSchema.IGraphQl;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace RevitGraphQLResolver.GraphQL
 {
@@ -43,6 +45,66 @@ namespace RevitGraphQLResolver.GraphQL
             var scheduleList = new FilteredElementCollector(_doc)
                 .OfClass(typeof(ViewSchedule))
                 .Select(p => (ViewSchedule)p).ToList();
+
+
+            try
+            {
+                var mess = ResolverEntry.aRevitTask.Run<string>(app =>
+                {
+                    StringBuilder aStringBuilder = new StringBuilder();
+                    foreach (var aViewSchedule in scheduleList)
+                    {
+
+                        TableData table = aViewSchedule.GetTableData();
+                        var rowCount = aViewSchedule.GetTableData().GetSectionData(SectionType.Body).NumberOfRows;
+                        var colCount = aViewSchedule.GetTableData().GetSectionData(SectionType.Body).NumberOfColumns;
+
+
+                        for (int i = 0; i < rowCount; i++)
+                        {
+                            for (int j = 0; j < colCount; j++)
+                            {
+                                aStringBuilder.Append(aViewSchedule.GetCellText(SectionType.Body, i, j));
+                                aStringBuilder.Append(" | ");
+                            }
+                            aStringBuilder.Append(System.Environment.NewLine);
+                        }
+                    }
+                    return aStringBuilder.ToString();
+                }).Result;
+            
+                
+            }
+            catch (Exception ex)
+            {
+                var m = ex.Message;
+            }
+
+            //foreach(var aViewSchedule in scheduleList)
+            //{
+            //    //using (Transaction transaction = new Transaction(_doc))
+            //    //{
+            //    //    if (transaction.Start($"Reading Schedule {aViewSchedule.Name}") == TransactionStatus.Started)
+            //    //    {
+            //            TableData table = aViewSchedule.GetTableData();
+            //            var rowCount = aViewSchedule.GetTableData().GetSectionData(SectionType.Body).NumberOfRows;
+            //            var colCount = aViewSchedule.GetTableData().GetSectionData(SectionType.Body).NumberOfColumns;
+
+            //            var data = new StringBuilder();
+
+            //            for (int i = 0; i < rowCount; i++)
+            //            {
+            //                for (int j = 0; j < colCount; j++)
+            //                {
+            //                    data.Append(aViewSchedule.GetCellText(SectionType.Body, i, j));
+            //                    data.Append(" | ");
+            //                }
+            //                data.Append(System.Environment.NewLine);
+            //            }
+            //    //    }
+            //    //}
+
+            //}
 
             var stringList = scheduleList.Select(x => x.Name).OrderBy(x => x).ToList();
 

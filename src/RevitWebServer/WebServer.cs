@@ -1,4 +1,5 @@
 ﻿using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
 using Microsoft.Owin.Hosting;
 using Owin;
 using System;
@@ -20,16 +21,19 @@ namespace RevitWebServer
         public static bool isBusy = false;
 
         public static Document Doc;
+        public static ExternalEvent exEvent;
+        public static RevitTask aRevitTask;
 
         private IDisposable _server = null;
 
-        public WebServer(string _host, string _port, Document _doc)
+        public WebServer(string _host, string _port, Document _doc, RevitTask _aRevitTask)
         {
             Host = _host;
             Port = _port;
             BaseUrl = string.Format("http://{0}:{1}/", Host, Port);
 
             Doc = _doc;
+            aRevitTask = _aRevitTask;
         }
         public void Start()
         {

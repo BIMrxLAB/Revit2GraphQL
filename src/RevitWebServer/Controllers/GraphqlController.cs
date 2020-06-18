@@ -24,7 +24,7 @@ namespace RevitWebServer.Controllers
             {
                 WebServer.isBusy = true;
 
-                ResolverEntry aEntry = new ResolverEntry(WebServer.Doc);
+                ResolverEntry aEntry = new ResolverEntry(WebServer.Doc, WebServer.aRevitTask);
 
                 object result = await aEntry.GetResultAsync(query);
 
