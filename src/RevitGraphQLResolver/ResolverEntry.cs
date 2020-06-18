@@ -11,10 +11,12 @@ namespace RevitGraphQLResolver
     public class ResolverEntry
     {
         public static Document Doc { get; set; }
+        public static RevitTask aRevitTask;
 
-        public ResolverEntry(Document _doc)
+        public ResolverEntry(Document _doc, RevitTask _aRevitTask)
         {
             Doc = _doc;
+            aRevitTask = _aRevitTask;
         }
 
         public async Task<object> GetResultAsync(JObject queryJObject)
@@ -40,6 +42,7 @@ namespace RevitGraphQLResolver
             result.EnrichWithApolloTracing(start);
 
             return result;
+
         }
     }
 }
