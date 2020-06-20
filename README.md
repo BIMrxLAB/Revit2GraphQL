@@ -6,6 +6,13 @@ here's what you should have if you click this correctly:
 1) a webapi controller you can call at http://localhost:9000/api/about returning the path of your revit file.
 1) a graphql controller you can call using graphiql at http://localhost:9000/api/graphql
 
+the following elements can be resolved using GraphQL:
+
+1) FamilyCategories, Families, FamilySymbols
+1) Schedules with data
+1) MEP Systems - entrance only: id, name, mep domain
+1) assemblies - entrance only: id, name
+1) sheets - entrance only: id, name
 
 the only thing this needs in the Revit.exe.config file's //runtime//assemblyBinding section is
 
