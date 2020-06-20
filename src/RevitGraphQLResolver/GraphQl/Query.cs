@@ -1,4 +1,5 @@
 ﻿using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Mechanical;
 using GraphQL;
 using GraphQL.Types;
 using RevitGraphQLResolver.GraphQLModel;
@@ -36,79 +37,29 @@ namespace RevitGraphQLResolver.GraphQL
             return stringList;
         }
 
-        //https://thebuildingcoder.typepad.com/blog/2012/05/the-schedule-api-and-access-to-schedule-data.html
-        [GraphQLMetadata("schedules")]
-        public List<string> GetSchedules(ResolveFieldContext context)
+
+        [GraphQLMetadata("qlViewSchedules")]
+        public List<QLViewSchedule> GetViewSchedules(ResolveFieldContext context, string[] nameFilter = null)
         {
+
             Document _doc = ResolverEntry.Doc;
+            var scheduleList = new FilteredElementCollector(_doc).OfClass(typeof(ViewSchedule)).Select(p => (ViewSchedule)p).Where(x=>!x.Name.Contains("Revision Schedule")).ToList();
 
-            var scheduleList = new FilteredElementCollector(_doc)
-                .OfClass(typeof(ViewSchedule))
-                .Select(p => (ViewSchedule)p).ToList();
+            var nameFilterStrings = nameFilter != null ? nameFilter.ToList() : new List<string>();
+            var qlViewScheduleData = GraphQlHelpers.GetFieldFromContext(context, "qlViewScheduleData");
 
+            var returnObject = new ConcurrentBag<QLViewSchedule>();
 
-            try
+            //Parallel.ForEach(objectList, aFamily =>
+            foreach (var aViewSchedule in scheduleList)
             {
-                var mess = ResolverEntry.aRevitTask.Run<string>(app =>
+                if (nameFilterStrings.Count == 0 || nameFilterStrings.Contains(aViewSchedule.Name))
                 {
-                    StringBuilder aStringBuilder = new StringBuilder();
-                    foreach (var aViewSchedule in scheduleList)
-                    {
-
-                        TableData table = aViewSchedule.GetTableData();
-                        var rowCount = aViewSchedule.GetTableData().GetSectionData(SectionType.Body).NumberOfRows;
-                        var colCount = aViewSchedule.GetTableData().GetSectionData(SectionType.Body).NumberOfColumns;
-
-
-                        for (int i = 0; i < rowCount; i++)
-                        {
-                            for (int j = 0; j < colCount; j++)
-                            {
-                                aStringBuilder.Append(aViewSchedule.GetCellText(SectionType.Body, i, j));
-                                aStringBuilder.Append(" | ");
-                            }
-                            aStringBuilder.Append(System.Environment.NewLine);
-                        }
-                    }
-                    return aStringBuilder.ToString();
-                }).Result;
-            
-                
+                    var qlViewScheudle = new QLViewScheduleResolve(aViewSchedule, qlViewScheduleData);
+                    returnObject.Add(qlViewScheudle);
+                }
             }
-            catch (Exception ex)
-            {
-                var m = ex.Message;
-            }
-
-            //foreach(var aViewSchedule in scheduleList)
-            //{
-            //    //using (Transaction transaction = new Transaction(_doc))
-            //    //{
-            //    //    if (transaction.Start($"Reading Schedule {aViewSchedule.Name}") == TransactionStatus.Started)
-            //    //    {
-            //            TableData table = aViewSchedule.GetTableData();
-            //            var rowCount = aViewSchedule.GetTableData().GetSectionData(SectionType.Body).NumberOfRows;
-            //            var colCount = aViewSchedule.GetTableData().GetSectionData(SectionType.Body).NumberOfColumns;
-
-            //            var data = new StringBuilder();
-
-            //            for (int i = 0; i < rowCount; i++)
-            //            {
-            //                for (int j = 0; j < colCount; j++)
-            //                {
-            //                    data.Append(aViewSchedule.GetCellText(SectionType.Body, i, j));
-            //                    data.Append(" | ");
-            //                }
-            //                data.Append(System.Environment.NewLine);
-            //            }
-            //    //    }
-            //    //}
-
-            //}
-
-            var stringList = scheduleList.Select(x => x.Name).OrderBy(x => x).ToList();
-
-            return stringList;
+            return returnObject.OrderBy(x => x.name).ToList();
         }
 
         [GraphQLMetadata("qlFamilies")]
@@ -164,5 +115,58 @@ namespace RevitGraphQLResolver.GraphQL
 
         }
 
+        [GraphQLMetadata("qlMepSystems")]
+        public List<QLMepSystem> GetMepSystems(ResolveFieldContext context, string[] nameFilter = null)
+        {
+
+            Document _doc = ResolverEntry.Doc;
+
+            //https://github.com/jeremytammik/TraverseAllSystems/blob/master/TraverseAllSystems/Command.cs
+            var objectList = new FilteredElementCollector(_doc).OfClass(typeof(MEPSystem)); //.Select(x=>x as MEPSystem).ToList<MEPSystem>();
+
+            var nameFilterStrings = nameFilter != null ? nameFilter.ToList() : new List<string>();
+
+
+            var returnObject = new ConcurrentBag<QLMepSystem>();
+
+            //Parallel.ForEach(stringList, aFamilyCategoryName =>
+            foreach (MEPSystem aMepSystem in objectList)
+            {
+                if (nameFilterStrings.Count == 0 || nameFilterStrings.Contains(aMepSystem.Name))
+                {
+                    var qlMepSystem = new QLMepSystemResolve(aMepSystem);
+                    returnObject.Add(qlMepSystem);
+                }
+            }
+            return returnObject.OrderBy(x => x.name).ToList();
+
+        }
+
+        [GraphQLMetadata("qlAssemblies")]
+        public List<QLAssembly> GetAssemblies(ResolveFieldContext context, string[] nameFilter = null)
+        {
+
+            Document _doc = ResolverEntry.Doc;
+
+            //https://github.com/jeremytammik/TraverseAllSystems/blob/master/TraverseAllSystems/Command.cs
+            var objectList = new FilteredElementCollector(_doc).OfClass(typeof(AssemblyInstance)); //.Select(x=>x as MEPSystem).ToList<MEPSystem>();
+
+            var nameFilterStrings = nameFilter != null ? nameFilter.ToList() : new List<string>();
+
+
+            var returnObject = new ConcurrentBag<QLAssembly>();
+
+            //Parallel.ForEach(stringList, aFamilyCategoryName =>
+            foreach (AssemblyInstance aAssembly in objectList)
+            {
+                if (nameFilterStrings.Count == 0 || nameFilterStrings.Contains(aAssembly.Name))
+                {
+                    var qlMepSystem = new QLAssemblyResolve(aAssembly);
+                    returnObject.Add(qlMepSystem);
+                }
+            }
+            return returnObject.OrderBy(x => x.name).ToList();
+
+        }
     }
 }

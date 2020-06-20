@@ -20,6 +20,34 @@
                 name: String
             }
 
+            type QLViewSchedule {
+                id: String,
+                name: String,
+                qlViewScheduleData: QLViewScheduleData
+            }
+
+            type QLViewScheduleData {
+                headers: [String],
+                rows: [QLViewScheduleRow]
+            }
+
+            type QLViewScheduleRow {
+                id: String,
+                cells: [String]
+            }
+
+
+            type QLMepSystem {
+                id: String,
+                name: String,
+                mepDomain: String
+            }
+
+            type QLAssembly {
+                id: String,
+                name: String
+            }
+
             type Query {
                 hello: String
             }
@@ -29,7 +57,15 @@
             }
 
             type Query {
-                schedules: [String]
+                qlMepSystems(nameFilter: [String]): [QLMepSystem]
+            }
+
+            type Query {
+                qlAssemblies(nameFilter: [String]): [QLAssembly]
+            }
+
+            type Query {
+                qlViewSchedules(nameFilter: [String]): [QLViewSchedule]
             }
 
             type Query {
