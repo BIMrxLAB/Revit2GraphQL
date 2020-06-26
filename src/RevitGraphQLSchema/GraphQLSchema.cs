@@ -40,12 +40,20 @@
             type QLMepSystem {
                 id: String,
                 name: String,
-                mepDomain: String
+                mepDomain: String,
+                qlTammTreeNode: QLTammTreeNode
+            }
+
+            type QLTammTreeNode {
+                id: String,
+                text: String,
+                children: [QLTammTreeNode]
             }
 
             type QLAssembly {
                 id: String,
-                name: String
+                name: String,
+                hasViews: Boolean
             }
 
             type Query {

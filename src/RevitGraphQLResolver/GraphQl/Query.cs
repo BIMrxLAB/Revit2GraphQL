@@ -151,8 +151,16 @@ namespace RevitGraphQLResolver.GraphQL
             //https://github.com/jeremytammik/TraverseAllSystems/blob/master/TraverseAllSystems/Command.cs
             var objectList = new FilteredElementCollector(_doc).OfClass(typeof(AssemblyInstance)); //.Select(x=>x as MEPSystem).ToList<MEPSystem>();
 
-            var nameFilterStrings = nameFilter != null ? nameFilter.ToList() : new List<string>();
-
+            var nameFilterStrings = nameFilter != null ? nameFilter.ToList() : new List<string>();            
+            var qlFieldViews = GraphQlHelpers.GetFieldFromContext(context, "hasViews");
+            List<View> viewListing = null;
+            if (qlFieldViews!=null)
+            {
+                viewListing = new FilteredElementCollector(ResolverEntry.Doc)
+                             .OfCategory(BuiltInCategory.OST_Views)
+                             .WhereElementIsNotElementType()
+                             .Cast<View>().ToList();
+            }
 
             var returnObject = new ConcurrentBag<QLAssembly>();
 
@@ -161,7 +169,7 @@ namespace RevitGraphQLResolver.GraphQL
             {
                 if (nameFilterStrings.Count == 0 || nameFilterStrings.Contains(aAssembly.Name))
                 {
-                    var qlMepSystem = new QLAssemblyResolve(aAssembly);
+                    var qlMepSystem = new QLAssemblyResolve(aAssembly, qlFieldViews, viewListing);
                     returnObject.Add(qlMepSystem);
                 }
             }

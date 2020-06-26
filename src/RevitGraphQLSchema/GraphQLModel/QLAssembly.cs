@@ -9,6 +9,9 @@ namespace RevitGraphQLSchema.GraphQLModel
         public string id { get; set; }
         public string name { get; set; }
 
+        public bool hasViews { get; set; }
+        public string levelName { get; set; }
+        public string serviceName { get; set; }
 
     }
 }
