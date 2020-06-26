@@ -87,6 +87,11 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\graphql.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="Resources\code-small.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>

@@ -36,11 +36,11 @@ namespace RevitCommand
 
             // BUTTON FOR THE MULTI-THREADED WPF OPTION
             if (panel.AddItem(
-                new PushButtonData("GraphQL4Revit", "GraphQL4Revit", thisAssemblyPath,
+                new PushButtonData("Local GraphQL", "Local GraphQL", thisAssemblyPath,
                     "RevitCommand.EntryCommandSeparateThread")) is PushButton button2)
             {
-                button2.ToolTip = "Visual interface for debugging applications.";
-                Uri uriImage = new Uri("pack://application:,,,/RevitCommand;component/Resources/code-small.png");
+                button2.ToolTip = "Visual interface to start/stop local GraphQL endpoint.";
+                Uri uriImage = new Uri("pack://application:,,,/RevitCommand;component/Resources/graphql.png");
                 BitmapImage largeImage = new BitmapImage(uriImage);
                 button2.LargeImage = largeImage;
             }
@@ -60,25 +60,6 @@ namespace RevitCommand
         public Result OnShutdown(UIControlledApplication a)
         {
             return Result.Succeeded;
-        }
-
-        /// <summary>
-        /// This is the method which launches the WPF window, and injects any methods that are
-        /// wrapped by ExternalEventHandlers. This can be done in a number of different ways, and
-        /// implementation will differ based on how the WPF is set up.
-        /// </summary>
-        /// <param name="uiapp">The Revit UIApplication within the add-in will operate.</param>
-        public void ShowForm(UIApplication uiapp)
-        {
-            // If we do not have a dialog yet, create and show it
-            if (_mMyForm != null && _mMyForm == null) return;
-            //EXTERNAL EVENTS WITH ARGUMENTS
-
-            RevitTask aRevitTask = new RevitTask();
-
-            // The dialog becomes the owner responsible for disposing the objects given to it.
-            _mMyForm = new Ui(uiapp, aRevitTask);
-            _mMyForm.Show();
         }
 
         /// <summary>
@@ -155,7 +136,7 @@ namespace RevitCommand
             // Try to create ribbon panel.
             try
             {
-                RibbonPanel panel = a.CreateRibbonPanel(tab, "Develop");
+                RibbonPanel panel = a.CreateRibbonPanel(tab, "Local");
             }
             catch (Exception ex)
             {
@@ -164,7 +145,7 @@ namespace RevitCommand
 
             // Search existing tab for your panel.
             List<RibbonPanel> panels = a.GetRibbonPanels(tab);
-            foreach (RibbonPanel p in panels.Where(p => p.Name == "Develop"))
+            foreach (RibbonPanel p in panels.Where(p => p.Name == "Local"))
             {
                 ribbonPanel = p;
             }

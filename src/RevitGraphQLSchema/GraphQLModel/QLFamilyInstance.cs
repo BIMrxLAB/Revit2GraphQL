@@ -4,12 +4,11 @@ using System.Text;
 
 namespace RevitGraphQLSchema.GraphQLModel
 {
-    public class QLAssembly
+    public class QLFamilyInstance
     {
         public string id { get; set; }
         public string name { get; set; }
-
-        public bool hasViews { get; set; }
+        public List<QLParameter> qlParameters { get; set; }
 
     }
 }

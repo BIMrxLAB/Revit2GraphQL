@@ -2,7 +2,9 @@
 using Autodesk.Revit.DB.Electrical;
 using Autodesk.Revit.DB.Mechanical;
 using Autodesk.Revit.DB.Plumbing;
+using Newtonsoft.Json.Linq;
 using RevitGraphQLSchema.GraphQLModel;
+using TraverseAllSystems;
 
 namespace RevitGraphQLResolver.GraphQLModel
 {
@@ -15,6 +17,25 @@ namespace RevitGraphQLResolver.GraphQLModel
             name = _mepSystem.Name;
 
             mepDomain = GetMepDomain(_mepSystem).ToString();
+
+
+            //https://thebuildingcoder.typepad.com/blog/2016/06/traversing-and-exporting-all-mep-system-graphs.html
+            // to travers mep system from the root
+            FamilyInstance root = _mepSystem.BaseEquipment;
+
+            if (root != null && (_mepSystem.GetType() == typeof(MechanicalSystem)))
+            {
+
+                // Traverse the system and dump the 
+                // traversal graph into an XML file
+
+                TraversalTree tree = new TraversalTree(_mepSystem);
+
+                if (tree.Traverse())
+                {
+                    qlTammTreeNode = new QLTammTreeNodeResolve(JObject.Parse(tree.DumpToJsonTopDown()));
+                }
+            }
         }
 
         /// <summary>

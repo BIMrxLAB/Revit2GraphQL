@@ -72,6 +72,7 @@ namespace RevitGraphQLResolver.GraphQL
 
             var nameFilterStrings = nameFilter != null ? nameFilter.ToList() : new List<string>();
             var qlFamilySymbolsField = GraphQlHelpers.GetFieldFromContext(context, "qlFamilySymbols");
+            var qlFamilyInstancesField = GraphQlHelpers.GetFieldFromContext(context, "qlFamilyInstances");
 
             var returnObject = new ConcurrentBag<QLFamily>();
 
@@ -80,7 +81,7 @@ namespace RevitGraphQLResolver.GraphQL
             {
                 if (nameFilterStrings.Count == 0 || nameFilterStrings.Contains(aFamily.Name))
                 {
-                    var qlFamily = new QLFamilyResolve(aFamily, qlFamilySymbolsField);
+                    var qlFamily = new QLFamilyResolve(aFamily, qlFamilySymbolsField, qlFamilyInstancesField);
                     returnObject.Add(qlFamily);
                 }
             }
@@ -94,20 +95,24 @@ namespace RevitGraphQLResolver.GraphQL
 
             Document _doc = ResolverEntry.Doc;
 
-            var objectList = new FilteredElementCollector(_doc).OfClass(typeof(Family)).Select(x => (x as Family).FamilyCategory);
-            var stringList = objectList.Select(x => x.Name).OrderBy(x => x).Distinct().ToList();
+            List<Category> objectList = new FilteredElementCollector(_doc).OfClass(typeof(Family)).Select(x => (x as Family).FamilyCategory).GroupBy(x => x.Id.ToString()).Select(x => x.First()).ToList();
+            //var stringList = objectList.Select(x => x.Name).OrderBy(x => x).Distinct().ToList();
+            //https://thebuildingcoder.typepad.com/blog/2010/05/categories.html
+            //var objectList = _doc.Settings.Categories;
 
             var nameFilterStrings = nameFilter != null ? nameFilter.ToList() : new List<string>();
             var qlFamiliesField = GraphQlHelpers.GetFieldFromContext(context, "qlFamilies");
+            var qlFamilyInstancesField = GraphQlHelpers.GetFieldFromContext(context, "qlFamilyInstances");
+
 
             var returnObject = new ConcurrentBag<QLFamilyCategory>();
 
             //Parallel.ForEach(stringList, aFamilyCategoryName =>
-            foreach(var aFamilyCategoryName in stringList)
+            foreach(Category aCategory in objectList)
             {
-                if (nameFilterStrings.Count == 0 || nameFilterStrings.Contains(aFamilyCategoryName))
+                if (nameFilterStrings.Count == 0 || nameFilterStrings.Contains(aCategory.Name))
                 {
-                    var qlFamilyCategory = new QLFamilyCategoryResolve(aFamilyCategoryName, qlFamiliesField);
+                    var qlFamilyCategory = new QLFamilyCategoryResolve(aCategory, qlFamiliesField, qlFamilyInstancesField);
                     returnObject.Add(qlFamilyCategory);
                 }
             }
@@ -151,8 +156,16 @@ namespace RevitGraphQLResolver.GraphQL
             //https://github.com/jeremytammik/TraverseAllSystems/blob/master/TraverseAllSystems/Command.cs
             var objectList = new FilteredElementCollector(_doc).OfClass(typeof(AssemblyInstance)); //.Select(x=>x as MEPSystem).ToList<MEPSystem>();
 
-            var nameFilterStrings = nameFilter != null ? nameFilter.ToList() : new List<string>();
-
+            var nameFilterStrings = nameFilter != null ? nameFilter.ToList() : new List<string>();            
+            var qlFieldViews = GraphQlHelpers.GetFieldFromContext(context, "hasViews");
+            List<View> viewListing = null;
+            if (qlFieldViews!=null)
+            {
+                viewListing = new FilteredElementCollector(ResolverEntry.Doc)
+                             .OfCategory(BuiltInCategory.OST_Views)
+                             .WhereElementIsNotElementType()
+                             .Cast<View>().ToList();
+            }
 
             var returnObject = new ConcurrentBag<QLAssembly>();
 
@@ -161,7 +174,7 @@ namespace RevitGraphQLResolver.GraphQL
             {
                 if (nameFilterStrings.Count == 0 || nameFilterStrings.Contains(aAssembly.Name))
                 {
-                    var qlMepSystem = new QLAssemblyResolve(aAssembly);
+                    var qlMepSystem = new QLAssemblyResolve(aAssembly, qlFieldViews, viewListing);
                     returnObject.Add(qlMepSystem);
                 }
             }

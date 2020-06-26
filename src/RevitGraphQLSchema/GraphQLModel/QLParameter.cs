@@ -2,13 +2,11 @@
 
 namespace RevitGraphQLSchema.GraphQLModel
 {
-    public class QLFamilyCategory
+    public class QLParameter
     {
         public string id { get; set; }
         public string name { get; set; }
-        public List<QLFamily> qlFamilies { get; set; }
-
-        public List<QLFamilyInstance> qlFamilyInstances { get; set; }
+        public string value { get; set; }
 
     }
 }
