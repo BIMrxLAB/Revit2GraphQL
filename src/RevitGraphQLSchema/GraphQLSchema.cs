@@ -5,19 +5,35 @@
         public static readonly string schema = @"
             
             type QLFamilyCategory {
+                id: String,                
                 name: String,
-                qlFamilies(nameFilter: [String]): [QLFamily]
+                qlFamilies(nameFilter: [String]): [QLFamily],
+                qlFamilyInstances(nameFilter: [String]): [QLFamilyInstance]
             }
 
             type QLFamily {
                 id: String,
                 name: String,
-                qlFamilySymbols(nameFilter: [String]): [QLFamilySymbol]
+                qlFamilySymbols(nameFilter: [String]): [QLFamilySymbol],
+                qlFamilyInstances(nameFilter: [String]): [QLFamilyInstance]
             }
 
             type QLFamilySymbol {
                 id: String,
+                name: String,
+                qlFamilyInstances(nameFilter: [String]): [QLFamilyInstance]
+            }
+
+            type QLFamilyInstance {
+                id: String,
                 name: String
+                qlParameters(nameFilter: [String]): [QLParameter]
+            }
+
+            type QLParameter {
+                id: String,
+                name: String,
+                value: String
             }
 
             type QLViewSchedule {

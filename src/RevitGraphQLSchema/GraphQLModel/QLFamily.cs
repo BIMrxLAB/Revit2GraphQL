@@ -7,5 +7,7 @@ namespace RevitGraphQLSchema.GraphQLModel
         public string id { get; set; }
         public string name { get; set; }
         public List<QLFamilySymbol> qlFamilySymbols { get; set; }
+        public List<QLFamilyInstance> qlFamilyInstances { get; set; }
+
     }
 }
