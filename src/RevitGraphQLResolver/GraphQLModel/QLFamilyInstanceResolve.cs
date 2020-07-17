@@ -39,7 +39,9 @@ namespace RevitGraphQLResolver.GraphQLModel
                         {
                             id = x.Id.ToString(),
                             name = x.Definition.Name,
-                            value = x.AsValueString()
+                            value = x.AsValueString() == null ? x.AsString() : x.AsValueString(),
+                            userModifiable = x.UserModifiable,
+                            isReadOnly = x.IsReadOnly
                         });
                     }
                 }

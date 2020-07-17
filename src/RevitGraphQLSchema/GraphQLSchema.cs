@@ -33,7 +33,15 @@
             type QLParameter {
                 id: String,
                 name: String,
-                value: String
+                value: String,
+                userModifiable: Boolean,
+                isReadOnly: Boolean
+            }
+
+            input UpdateQLParameter {
+                instanceId: String,
+                parameterId: String,
+                updateValue: String
             }
 
             type QLViewSchedule {
@@ -81,6 +89,10 @@
             }
 
             type Query {
+                phases: [String]
+            }
+
+            type Query {
                 qlMepSystems(nameFilter: [String]): [QLMepSystem]
             }
 
@@ -98,6 +110,10 @@
 
             type Query {
                 qlFamilies(nameFilter: [String]): [QLFamily]
+            }
+
+            type Mutation {
+                qlParameters(input: [UpdateQLParameter]): [QLParameter]
             }
 
             ";

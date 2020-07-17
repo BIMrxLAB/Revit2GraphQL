@@ -8,5 +8,9 @@ namespace RevitGraphQLSchema.GraphQLModel
         public string name { get; set; }
         public string value { get; set; }
 
+        public bool userModifiable { get; set; }
+
+        public bool isReadOnly { get; set; }
+
     }
 }

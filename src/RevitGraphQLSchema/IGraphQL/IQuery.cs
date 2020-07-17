@@ -21,10 +21,15 @@ namespace RevitGraphQLSchema.IGraphQl
         [GraphQLMetadata("sheets")]
         List<string> GetSheets(ResolveFieldContext context);
 
+        [GraphQLMetadata("phases")]
+        List<string> GetPhases(ResolveFieldContext context);
+
         [GraphQLMetadata("qlMepSystems")]
         List<QLMepSystem> GetMepSystems(ResolveFieldContext context, string[] nameFilter = null);
 
         [GraphQLMetadata("qlAssemblies")]
         List<QLAssembly> GetAssemblies(ResolveFieldContext context, string[] nameFilter = null);
+
+
     }
 }
