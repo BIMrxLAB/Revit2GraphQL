@@ -18,6 +18,7 @@ namespace RevitGraphQLResolver.GraphQL
             this._schema = Schema.For(RevitGraphQLSchema.GraphQLSchema.schema, _ =>
                 {
                     _.Types.Include<Query>();
+                    _.Types.Include<Mutation>();
                 });
         }
 

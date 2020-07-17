@@ -32,11 +32,24 @@ namespace RevitGraphQLResolver.GraphQL
                 .OfClass(typeof(ViewSheet))
                 .Select(p => (ViewSheet)p).ToList();
 
-            var stringList = sheetList.Select(x => x.Name).OrderBy(x => x).ToList();
+            var stringList = sheetList.Select(x => $"{x.Name} (ID: {x.Id})").OrderBy(x => x).ToList();
 
             return stringList;
         }
 
+        [GraphQLMetadata("phases")]
+        public List<string> GetPhases(ResolveFieldContext context)
+        {
+            Document _doc = ResolverEntry.Doc;
+
+            List<string> returnObject = new List<string>();
+            foreach(Phase aPhase in _doc.Phases)
+            {
+                returnObject.Add($"{aPhase.Name} (ID: {aPhase.Id})");
+            }
+
+            return returnObject.OrderBy(x => x).ToList();
+        }
 
         [GraphQLMetadata("qlViewSchedules")]
         public List<QLViewSchedule> GetViewSchedules(ResolveFieldContext context, string[] nameFilter = null)
