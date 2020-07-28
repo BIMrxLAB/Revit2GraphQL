@@ -9,10 +9,14 @@ here's what you should have if you click this correctly:
 the following elements can be resolved using GraphQL:
 
 1) FamilyCategories, Families, FamilySymbols
-1) Schedules with data
+1) FamilyInstances with Parameters
+1) ViewSchedules with data
 1) MEP Systems - entrance only: id, name, mep domain
-1) assemblies - entrance only: id, name
-1) sheets - entrance only: id, name
+1) Assemblies - entrance only: id, name
+1) Sheets - entrance only: id, name
+1) Phases - entrance only: id, name
+
+there is a mutation that let's you change parameters.
 
 the only thing this needs in the Revit.exe.config file's //runtime//assemblyBinding section is
 
