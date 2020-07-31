@@ -18,15 +18,6 @@ the following elements can be resolved using GraphQL:
 
 there is a mutation that let's you change parameters.
 
-the only thing this needs in the Revit.exe.config file's //runtime//assemblyBinding section is
-
-~~~ XML
-      <dependentAssembly>
-        <assemblyIdentity name="Microsoft.Owin" publicKeyToken="31bf3856ad364e35" culture="neutral" />
-        <bindingRedirect oldVersion="0.0.0.0-4.1.0.0" newVersion="4.1.0.0" />
-      </dependentAssembly>
-~~~
-
 we keep the various class library projects separated to:
 
 1) accomodate cloud based routing engines such as BIMrx Marconi
