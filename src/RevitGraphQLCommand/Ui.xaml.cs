@@ -4,7 +4,7 @@ using RevitWebServer;
 using System;
 using System.Windows;
 
-namespace RevitCommand
+namespace RevitGraphQLCommand
 {
     /// <summary>
     /// Interaction logic for UI.xaml

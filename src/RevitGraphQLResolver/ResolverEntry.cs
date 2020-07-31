@@ -25,7 +25,7 @@ namespace RevitGraphQLResolver
 
             GraphQLQuery query = queryJObject.ToObject<GraphQLQuery>();
 
-            var inputs = query.Variables.ToInputs();
+            var inputs = query.Variables?.ToInputs();
 
             var schema = new MySchema();
 

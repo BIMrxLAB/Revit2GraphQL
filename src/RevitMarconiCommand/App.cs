@@ -1,19 +1,16 @@
-﻿using System;
+﻿using Autodesk.Revit.UI;
+using Autodesk.Revit.UI.Events;
+using RevitMarconiCommand.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using Autodesk.Revit.UI;
-using Autodesk.Revit.UI.Events;
 
-namespace RevitCommand
+namespace RevitMarconiCommand
 {
-    /// <summary>
-    /// This is the main class which defines the Application, and inherits from Revit's
-    /// IExternalApplication class.
-    /// </summary>
     class App : IExternalApplication
     {
         // class instance
@@ -24,6 +21,16 @@ namespace RevitCommand
 
         // Separate thread to run Ui on
         private Thread _uiThread;
+
+        private MsalAuthHelper _msalAuthHelper;
+        public MsalAuthHelper msalAuthHelper
+        {
+            get
+            {
+                if (_msalAuthHelper == null) _msalAuthHelper = new MsalAuthHelper();
+                return _msalAuthHelper;
+            }
+        }
 
         public Result OnStartup(UIControlledApplication a)
         {
@@ -36,11 +43,11 @@ namespace RevitCommand
 
             // BUTTON FOR THE MULTI-THREADED WPF OPTION
             if (panel.AddItem(
-                new PushButtonData("Local GraphQL", "Local GraphQL", thisAssemblyPath,
-                    "RevitCommand.EntryCommandSeparateThread")) is PushButton button2)
+                new PushButtonData("BIMrx.Marconi", "BIMrx.Marconi", thisAssemblyPath,
+                    "RevitMarconiCommand.EntryCommandSeparateThread")) is PushButton button2)
             {
-                button2.ToolTip = "Visual interface to start/stop local GraphQL endpoint.";
-                Uri uriImage = new Uri("pack://application:,,,/RevitCommand;component/Resources/graphql.png");
+                button2.ToolTip = "Visual interface to start/stop BIMrx.Marconi.";
+                Uri uriImage = new Uri("pack://application:,,,/RevitMarconiCommand;component/Resources/phone.png");
                 BitmapImage largeImage = new BitmapImage(uriImage);
                 button2.LargeImage = largeImage;
             }
@@ -72,12 +79,11 @@ namespace RevitCommand
         {
             // If we do not have a thread started or has been terminated start a new one
             if (!(_uiThread is null) && _uiThread.IsAlive) return;
-            //EXTERNAL EVENTS WITH ARGUMENTS
+
             //https://thebuildingcoder.typepad.com/blog/2020/02/external-communication-and-async-await-event-wrapper.html#2
             //https://github.com/WhiteSharq/RevitTask
 
             RevitTask aRevitTask = new RevitTask();
-
 
             _uiThread = new Thread(() =>
             {
@@ -85,7 +91,7 @@ namespace RevitCommand
                     new DispatcherSynchronizationContext(
                         Dispatcher.CurrentDispatcher));
                 // The dialog becomes the owner responsible for disposing the objects given to it.
-                _mMyForm = new Ui(uiapp, aRevitTask);
+                _mMyForm = new Ui(uiapp, aRevitTask, msalAuthHelper);
                 _mMyForm.Closed += (s, e) => Dispatcher.CurrentDispatcher.InvokeShutdown();
                 _mMyForm.Show();
                 Dispatcher.Run();
@@ -119,7 +125,7 @@ namespace RevitCommand
         public RibbonPanel RibbonPanel(UIControlledApplication a)
         {
 
-            string tab = "GraphQL4Revit"; // Tab name
+            string tab = "GraphQL"; // Tab name
 
             // Empty ribbon panel 
             RibbonPanel ribbonPanel = null;
@@ -136,7 +142,7 @@ namespace RevitCommand
             // Try to create ribbon panel.
             try
             {
-                RibbonPanel panel = a.CreateRibbonPanel(tab, "Local");
+                RibbonPanel panel = a.CreateRibbonPanel(tab, "Remote");
             }
             catch (Exception ex)
             {
@@ -145,7 +151,7 @@ namespace RevitCommand
 
             // Search existing tab for your panel.
             List<RibbonPanel> panels = a.GetRibbonPanels(tab);
-            foreach (RibbonPanel p in panels.Where(p => p.Name == "Local"))
+            foreach (RibbonPanel p in panels.Where(p => p.Name == "Remote"))
             {
                 ribbonPanel = p;
             }

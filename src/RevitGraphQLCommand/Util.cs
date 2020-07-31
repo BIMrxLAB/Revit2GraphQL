@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Threading;
 
-namespace RevitCommand
+namespace RevitGraphQLCommand
 {
     public static class Util
     {

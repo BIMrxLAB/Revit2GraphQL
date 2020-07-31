@@ -1,0 +1,29 @@
+﻿<Window x:Class="RevitMarconiCommand.Ui"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RevitMarconiCommand"
+             mc:Ignorable="d" 
+            Title="BIMrx.Marconi (c) Microdesk 2020" Height="250" Width="400" WindowStartupLocation="CenterScreen"
+             d:DesignHeight="250" d:DesignWidth="400">
+    <Grid>
+        <StackPanel Name="MarconiPanel" VerticalAlignment="Center" HorizontalAlignment="Center" Width="150">
+
+            <Button x:Name="SignInButton" Content="SignIn" IsEnabled="True" Click="SignInButton_Click" />
+
+            <Label x:Name="SignInLabel" Content="Label" IsEnabled="False" HorizontalContentAlignment="Center"/>
+
+
+            <Button x:Name="Marconi_Open" Content="Connect..." IsEnabled="False" Click="Marconi_Open_Click" />
+
+            <Button x:Name="Marconi_Close" Content="Hang Up" IsEnabled="False" Click="Marconi_Close_Click" />
+
+            <Label Name="MarconiIdLabel" Content="Marconi #: " HorizontalContentAlignment="Center"/>
+
+            <TextBox Name="MarconiIdText" Text="---" IsReadOnly="True" HorizontalContentAlignment="Center"/>
+            
+        </StackPanel>
+    </Grid>
+
+</Window>
