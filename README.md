@@ -6,7 +6,7 @@ Check out [BIMrx.Marconi.pdf](https://github.com/gregorvilkner/Revit2GraphQL/blo
 
 ## Current Itteration
 
-The current repo includes libraries for 2 individual Revit addins:
+The current repo includes projects for 2 individual Revit addins:
 1) a webapi hosted in Revit that exposes a GraphQL controller at http://localhost:9000/api/graphql. a very basic "about" controller that can be used for simple get requests at http://localhost:9000/api/about
 1) a marconi client that allows interoperability with your revit session over the web at https://marconi4revitwebapp.azurewebsites.net/
 
