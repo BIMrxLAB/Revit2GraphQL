@@ -1,13 +1,15 @@
-# Revit2GraphQL
-a local GraphQL endpoint for Revit.
+# GraphQL for Revit
+a GraphQL endpoint for Revit that can be accessed locally and remotely over the web.
 
-here's what you should have if you click this correctly:
+here's what is included in the current release:
 
-1) a webapi controller you can call at http://localhost:9000/api/about returning the path of your revit file.
+1) a webapi controller you can test at http://localhost:9000/api/about returning the path of your revit file.
 1) a graphql controller you can call using graphiql at http://localhost:9000/api/graphql
+1) a marconi client that allows interoperability with your revit session over the web at https://marconi4revitwebapp.azurewebsites.net/
 
 the following elements can be resolved using GraphQL:
 
+1) hello returns teh path of your revit file
 1) FamilyCategories, Families, FamilySymbols
 1) FamilyInstances with Parameters
 1) ViewSchedules with data
@@ -18,23 +20,32 @@ the following elements can be resolved using GraphQL:
 
 there is a mutation that let's you change parameters.
 
-we keep the various class library projects separated to:
-
-1) accomodate cloud based routing engines such as BIMrx Marconi
-1) get arround Revit 2020 not liking Newtonsoft.Json past version 9.0.1 - OWIN pulls Newtonsoft 6.0.1. so it's not so bad. But GraphQL is needy and wants 10.0.1. at the least.
-
-here's an .addin file to get this loaded:
+here are two .addin files to load the 2 commands:
 
 ~~~ XML
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <RevitAddIns>
   <AddIn Type="Application">
-    <Name>Revit GraphQL Server</Name>
-    <Assembly>"C:\Users\xyz\Source\Repos\Revit2GraphQL\src\RevitCommand\bin\Debug\RevitCommand.dll"</Assembly>
+    <Name>Local GraphQL Endpoint</Name>
+    <Assembly>C:\Users\xyz\source\repos\Revit2GraphQL\src\RevitGraphQLCommand\bin\Debug\RevitGraphQLCommand.dll</Assembly>
     <AddInId>73dc677a-5a96-41dd-b3be-ca81d06dfc2c</AddInId>
-    <FullClassName>RevitCommand.App</FullClassName>
-    <VendorId>DynamoChild</VendorId>
-    <VendorDescription>https://children.dynamo.com/Got2GoSocial</VendorDescription>
+    <FullClassName>RevitGraphQLCommand.App</FullClassName>
+    <VendorId>Microdesk</VendorId>
+    <VendorDescription>https://www.microdesk.com/bimrx/</VendorDescription>
+  </AddIn>
+</RevitAddIns>
+~~~
+
+~~~ XML
+<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>BIMrx.Marconi</Name>
+    <Assembly>C:\Users\xyz\source\repos\Revit2GraphQL\src\RevitMarconiCommand\bin\Debug\RevitMarconiCommand.dll</Assembly>
+    <AddInId>26516f0e-cdb2-43d0-9169-b4473db259ac</AddInId>
+    <FullClassName>RevitMarconiCommand.App</FullClassName>
+    <VendorId>Microdesk</VendorId>
+    <VendorDescription>https://www.microdesk.com/bimrx/</VendorDescription>
   </AddIn>
 </RevitAddIns>
 ~~~
