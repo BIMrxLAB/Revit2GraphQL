@@ -9,7 +9,7 @@ here's what is included in the current release:
 
 the following elements can be resolved using GraphQL:
 
-1) hello returns teh path of your revit file
+1) hello returns the path of your revit file
 1) FamilyCategories, Families, FamilySymbols
 1) FamilyInstances with Parameters
 1) ViewSchedules with data
