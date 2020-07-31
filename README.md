@@ -23,7 +23,7 @@ The current repo includes projects for 2 individual Revit addins:
 
 there is a mutation that let's you change parameters.
 
-## .addin files to load the commands
+## .addin files to load the revit commands
 
 ~~~ XML
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
