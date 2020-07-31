@@ -8,7 +8,7 @@ using System.Windows.Threading;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Events;
 
-namespace RevitCommand
+namespace RevitGraphQLCommand
 {
     /// <summary>
     /// This is the main class which defines the Application, and inherits from Revit's
@@ -37,10 +37,10 @@ namespace RevitCommand
             // BUTTON FOR THE MULTI-THREADED WPF OPTION
             if (panel.AddItem(
                 new PushButtonData("Local GraphQL", "Local GraphQL", thisAssemblyPath,
-                    "RevitCommand.EntryCommandSeparateThread")) is PushButton button2)
+                    "RevitGraphQLCommand.EntryCommandSeparateThread")) is PushButton button2)
             {
                 button2.ToolTip = "Visual interface to start/stop local GraphQL endpoint.";
-                Uri uriImage = new Uri("pack://application:,,,/RevitCommand;component/Resources/graphql.png");
+                Uri uriImage = new Uri("pack://application:,,,/RevitGraphQLCommand;component/Resources/graphql.png");
                 BitmapImage largeImage = new BitmapImage(uriImage);
                 button2.LargeImage = largeImage;
             }
@@ -119,7 +119,7 @@ namespace RevitCommand
         public RibbonPanel RibbonPanel(UIControlledApplication a)
         {
 
-            string tab = "GraphQL4Revit"; // Tab name
+            string tab = "GraphQL"; // Tab name
 
             // Empty ribbon panel 
             RibbonPanel ribbonPanel = null;
