@@ -1,16 +1,16 @@
 # GraphQL for Revit
-a GraphQL endpoint for Revit that can be accessed locally and remotely over the web.
+This project contains a GraphQL endpoint for Revit that can be accessed locally as well as remotely over the web.
 
 ![GraphiQL Client](https://github.com/gregorvilkner/Revit2GraphQL/blob/master/graphiql.png)
 Check out [BIMrx.Marconi.pdf](https://github.com/gregorvilkner/Revit2GraphQL/blob/master/BIMrx.Marconi%20SinglePage%201.1.pdf) for more information.
 
-## Current Release
+## Current Itteration
 
-1) a webapi controller you can test at http://localhost:9000/api/about returning the path of your revit file.
-1) a graphql controller you can call using graphiql at http://localhost:9000/api/graphql
+The current repo includes libraries for 2 individual Revit addins:
+1) a webapi hosted in Revit that exposes a GraphQL controller at http://localhost:9000/api/graphql. a very basic "about" controller that can be used for simple get requests at http://localhost:9000/api/about
 1) a marconi client that allows interoperability with your revit session over the web at https://marconi4revitwebapp.azurewebsites.net/
 
-## Currently Covered GraphQL Routes and Elements
+## GraphQL Routes and Elements
 
 1) hello returns the path of your revit file
 1) FamilyCategories, Families, FamilySymbols
@@ -23,7 +23,7 @@ Check out [BIMrx.Marconi.pdf](https://github.com/gregorvilkner/Revit2GraphQL/blo
 
 there is a mutation that let's you change parameters.
 
-here are two .addin files to load the 2 commands:
+## .addin files to load the commands
 
 ~~~ XML
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
