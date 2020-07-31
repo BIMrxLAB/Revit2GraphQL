@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:RevitGraphQLCommand"
              mc:Ignorable="d" 
+            Title="GraphQL for Revit" Height="250" Width="400" WindowStartupLocation="CenterScreen"
              d:DesignHeight="200" d:DesignWidth="300">
     <Grid>
         <StackPanel Name="GraphQLPanel" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center">
