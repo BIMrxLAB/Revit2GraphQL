@@ -51,7 +51,7 @@ namespace RevitMarconiCommand.Helpers
 
         public MsalAuthHelper()
         {
-            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+            //ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
             _app = PublicClientApplicationBuilder.Create(ClientId)
                 .WithB2CAuthority(Authority)
