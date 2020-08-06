@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>BIMrx.Marconi</Name>
+    <Assembly>RevitMarconiCommand\RevitMarconiCommand.dll</Assembly>
+    <AddInId>26516f0e-cdb2-43d0-9169-b4473db259ac</AddInId>
+    <FullClassName>RevitMarconiCommand.App</FullClassName>
+    <VendorId>Microdesk</VendorId>
+    <VendorDescription>https://www.microdesk.com/bimrx/</VendorDescription>
+  </AddIn>
+</RevitAddIns>
