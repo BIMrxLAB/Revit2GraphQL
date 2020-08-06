@@ -73,8 +73,19 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="Revit2GraphQL.addin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\RevitGraphQLResolver\RevitGraphQLResolver.csproj">
+      <Project>{f5e2f94e-dc93-4a71-a8df-5c13d97bc601}</Project>
+      <Name>RevitGraphQLResolver</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RevitGraphQLSchema\RevitGraphQLSchema.csproj">
+      <Project>{b5b78760-cc43-477d-a6ee-ce1276dccb66}</Project>
+      <Name>RevitGraphQLSchema</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RevitWebServer\RevitWebServer.csproj">
       <Project>{053728e3-50db-46bf-9d23-772570bd24b7}</Project>
       <Name>RevitWebServer</Name>
@@ -92,4 +103,13 @@
     </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if $(ConfigurationName) == Debug (
+mkdir "$(AppData)\Autodesk\REVIT\Addins\2020\$(TargetName)\"
+if exist "$(AppData)\Autodesk\REVIT\Addins\2020" copy "$(TargetDir)*.addin" "$(AppData)\Autodesk\REVIT\Addins\2020\"
+if exist "$(AppData)\Autodesk\REVIT\Addins\2020" copy  "$(TargetDir)*" "$(AppData)\Autodesk\REVIT\Addins\2020\$(TargetName)\" 
+
+)
+</PostBuildEvent>
+  </PropertyGroup>
 </Project>

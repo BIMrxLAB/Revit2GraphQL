@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>Local GraphQL Endpoint</Name>
+    <Assembly>RevitGraphQLCommand/RevitGraphQLCommand.dll</Assembly>
+    <AddInId>73dc677a-5a96-41dd-b3be-ca81d06dfc2c</AddInId>
+    <FullClassName>RevitGraphQLCommand.App</FullClassName>
+    <VendorId>Microdesk</VendorId>
+    <VendorDescription>https://www.microdesk.com/bimrx/</VendorDescription>
+  </AddIn>
+</RevitAddIns>
