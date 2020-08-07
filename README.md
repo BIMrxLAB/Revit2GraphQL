@@ -67,7 +67,7 @@ Dependencies do not include OWIN stuff. Instead, we have GraphQL 2.4.0, Newtonso
 1) FamilyCategories, Families, FamilySymbols
 1) FamilyInstances with Parameters
 1) ViewSchedules with data
-1) MEP Systems - entrance only: id, name, mep domain
+1) MEP Systems - name, mep domain, and traversal of MEP Tree
 1) Assemblies - entrance only: id, name
 1) Sheets - entrance only: id, name
 1) Phases - entrance only: id, name
