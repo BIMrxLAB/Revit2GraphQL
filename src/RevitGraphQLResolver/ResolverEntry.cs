@@ -1,9 +1,9 @@
 ﻿using Autodesk.Revit.DB;
 using GraphQL;
 using GraphQL.Instrumentation;
-using Newtonsoft.Json.Linq;
 using RevitGraphQLResolver.GraphQL;
 using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace RevitGraphQLResolver
@@ -19,29 +19,28 @@ namespace RevitGraphQLResolver
             aRevitTask = _aRevitTask;
         }
 
-        public async Task<object> GetResultAsync(JObject queryJObject)
+        public async Task<GraphQLExecutionResult> GetResultAsync(GraphQLQuery query)
         {
             var start = DateTime.UtcNow;
 
-            GraphQLQuery query = queryJObject.ToObject<GraphQLQuery>();
+            //GraphQLQuery query = queryJsonElement.As<GraphQLQuery>();
 
-            var inputs = query.Variables?.ToInputs();
+            var inputs = query.Variables.As<Inputs>();
 
             var schema = new MySchema();
 
-            var result = await new DocumentExecuter().ExecuteAsync(_ =>
+            ExecutionResult result = await new DocumentExecuter().ExecuteAsync(_ =>
             {
                 _.Schema = schema.GraphQLSchema;
                 _.Query = query.Query;
                 _.OperationName = query.OperationName;
                 _.Inputs = inputs;
-                _.ExposeExceptions = true;
                 _.EnableMetrics = true;
             });
 
             result.EnrichWithApolloTracing(start);
 
-            return result;
+            return new GraphQLExecutionResult(result.Data, result.Errors);
 
         }
     }

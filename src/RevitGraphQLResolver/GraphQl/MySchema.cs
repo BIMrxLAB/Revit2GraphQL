@@ -1,4 +1,5 @@
 ﻿using GraphQL.Types;
+using System;
 
 namespace RevitGraphQLResolver.GraphQL
 {
@@ -15,11 +16,18 @@ namespace RevitGraphQLResolver.GraphQL
 
         public MySchema()
         {
-            this._schema = Schema.For(RevitGraphQLSchema.GraphQLSchema.schema, _ =>
-                {
-                    _.Types.Include<Query>();
-                    _.Types.Include<Mutation>();
-                });
+            try
+            {
+                this._schema = Schema.For(RevitGraphQLSchema.GraphQLSchema.schema, _ =>
+                    {
+                        _.Types.Include<Query>();
+                        _.Types.Include<Mutation>();
+                    });
+            }
+            catch(Exception e)
+            {
+                var m = e.Message;
+            }
         }
 
     }

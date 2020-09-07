@@ -24,7 +24,7 @@ namespace RevitGraphQLResolver.GraphQL
         }
 
         [GraphQLMetadata("sheets")]
-        public List<string> GetSheets(ResolveFieldContext context)
+        public List<string> GetSheets(IResolveFieldContext context)
         {
             Document _doc = ResolverEntry.Doc;
 
@@ -38,7 +38,7 @@ namespace RevitGraphQLResolver.GraphQL
         }
 
         [GraphQLMetadata("phases")]
-        public List<string> GetPhases(ResolveFieldContext context)
+        public List<string> GetPhases(IResolveFieldContext context)
         {
             Document _doc = ResolverEntry.Doc;
 
@@ -52,7 +52,7 @@ namespace RevitGraphQLResolver.GraphQL
         }
 
         [GraphQLMetadata("qlViewSchedules")]
-        public List<QLViewSchedule> GetViewSchedules(ResolveFieldContext context, string[] nameFilter = null)
+        public List<QLViewSchedule> GetViewSchedules(IResolveFieldContext context, string[] nameFilter = null)
         {
 
             Document _doc = ResolverEntry.Doc;
@@ -76,7 +76,7 @@ namespace RevitGraphQLResolver.GraphQL
         }
 
         [GraphQLMetadata("qlFamilies")]
-        public List<QLFamily> GetFamilies(ResolveFieldContext context, string[] nameFilter = null)
+        public List<QLFamily> GetFamilies(IResolveFieldContext context, string[] nameFilter = null)
         {
 
             Document _doc = ResolverEntry.Doc;
@@ -103,7 +103,7 @@ namespace RevitGraphQLResolver.GraphQL
         }
 
         [GraphQLMetadata("qlFamilyCategories")]
-        public List<QLFamilyCategory> GetCategories(ResolveFieldContext context, string[] nameFilter = null)
+        public List<QLFamilyCategory> GetCategories(IResolveFieldContext context, string[] nameFilter = null)
         {
 
             Document _doc = ResolverEntry.Doc;
@@ -134,7 +134,7 @@ namespace RevitGraphQLResolver.GraphQL
         }
 
         [GraphQLMetadata("qlMepSystems")]
-        public List<QLMepSystem> GetMepSystems(ResolveFieldContext context, string[] nameFilter = null)
+        public List<QLMepSystem> GetMepSystems(IResolveFieldContext context, string[] nameFilter = null)
         {
 
             Document _doc = ResolverEntry.Doc;
@@ -161,7 +161,7 @@ namespace RevitGraphQLResolver.GraphQL
         }
 
         [GraphQLMetadata("qlAssemblies")]
-        public List<QLAssembly> GetAssemblies(ResolveFieldContext context, string[] nameFilter = null)
+        public List<QLAssembly> GetAssemblies(IResolveFieldContext context, string[] nameFilter = null)
         {
 
             Document _doc = ResolverEntry.Doc;

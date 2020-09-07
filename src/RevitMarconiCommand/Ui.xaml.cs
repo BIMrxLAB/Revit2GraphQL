@@ -1,13 +1,13 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Microsoft.Azure.ServiceBus;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using RevitGraphQLResolver;
+using RevitGraphQLResolver.GraphQL;
 using RevitMarconiCommand.Helpers;
 using System;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -211,7 +211,7 @@ namespace RevitMarconiCommand
                 // This can be done only if the queueClient is created in ReceiveMode.PeekLock mode (which is default).
                 await queueClient.CompleteAsync(message.SystemProperties.LockToken);
 
-                object result = null;
+                GraphQLExecutionResult result = null;
 
                 if (_marconiIsBusy)
                 {
@@ -230,29 +230,37 @@ namespace RevitMarconiCommand
 
                         ResolverEntry aEntry = new ResolverEntry(_doc, aRevitTask);
 
-                        result = await aEntry.GetResultAsync(JObject.Parse(query));
+                        result = await aEntry.GetResultAsync(JsonSerializer.Deserialize<GraphQLQuery>(query));
 
                     }
                     catch (Exception e)
                     {
-
+                        var m = e.Message;
                     }
 
                     _marconiIsBusy = false;
                 }
 
-                var responseMessage = new Message(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(result)))
+                try
                 {
-                    ContentType = "application/json",
-                    Label = "Response",
-                    CorrelationId = message.MessageId,
-                    MessageId = Guid.NewGuid().ToString(),
-                    TimeToLive = TimeSpan.FromMinutes(5)
-                };
+                    var responseMessage = new Message(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(result)))
+                    {
+                        ContentType = "application/json",
+                        Label = "Response",
+                        CorrelationId = message.MessageId,
+                        MessageId = Guid.NewGuid().ToString(),
+                        TimeToLive = TimeSpan.FromMinutes(5)
+                    };
 
-                // Send the message to the queue
-                IQueueClient queueResponseClient = new QueueClient(ServiceBusConnectionStringBuilder);
-                await queueClient.SendAsync(responseMessage);
+                    // Send the message to the queue
+                    IQueueClient queueResponseClient = new QueueClient(ServiceBusConnectionStringBuilder);
+                    await queueClient.SendAsync(responseMessage);
+                }
+                catch(Exception e)
+                {
+                    var m = e.Message;
+                }
+
 
             }
             else
