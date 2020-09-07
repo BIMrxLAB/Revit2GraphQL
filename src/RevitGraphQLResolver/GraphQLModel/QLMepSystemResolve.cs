@@ -2,8 +2,8 @@
 using Autodesk.Revit.DB.Electrical;
 using Autodesk.Revit.DB.Mechanical;
 using Autodesk.Revit.DB.Plumbing;
-using Newtonsoft.Json.Linq;
 using RevitGraphQLSchema.GraphQLModel;
+using System.Text.Json;
 using TraverseAllSystems;
 
 namespace RevitGraphQLResolver.GraphQLModel
@@ -33,7 +33,7 @@ namespace RevitGraphQLResolver.GraphQLModel
 
                 if (tree.Traverse())
                 {
-                    qlTammTreeNode = new QLTammTreeNodeResolve(JObject.Parse(tree.DumpToJsonTopDown()));
+                    qlTammTreeNode = new QLTammTreeNodeResolve(JsonSerializer.Deserialize<JsonElement>(tree.DumpToJsonTopDown()));
                 }
             }
         }

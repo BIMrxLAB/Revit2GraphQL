@@ -1,6 +1,7 @@
 ﻿using GraphQL;
-using Newtonsoft.Json.Linq;
 using RevitGraphQLResolver;
+using RevitGraphQLResolver.GraphQL;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -10,13 +11,13 @@ namespace RevitWebServer.Controllers
     public class GraphqlController : ApiController
     {
         [HttpPost]
-        public async Task<IHttpActionResult> Post([FromBody] JObject query)
+        public async Task<IHttpActionResult> Post([FromBody] GraphQLQuery query)
         {
+
             if (WebServer.isBusy)
             {
-                var result = new ExecutionResult();
-                result.Errors = new ExecutionErrors();
-                result.Errors.Add(new ExecutionError("Service is busy..."));
+                var result = new GraphQLExecutionResult();
+                result.errors.Add(new ExecutionError("Service is busy..."));
 
                 return Ok(result);
             }
@@ -26,22 +27,13 @@ namespace RevitWebServer.Controllers
 
                 ResolverEntry aEntry = new ResolverEntry(WebServer.Doc, WebServer.aRevitTask);
 
-                object result = await aEntry.GetResultAsync(query);
+                GraphQLExecutionResult result = await aEntry.GetResultAsync(query);
 
                 WebServer.isBusy = false;
 
                 return Ok(result);
             }
         }
-
-    }
-
-    public class GraphQLQuery
-    {
-        public string OperationName { get; set; }
-        public string NamedQuery { get; set; }
-        public string Query { get; set; }
-        public JObject Variables { get; set; }
 
     }
 

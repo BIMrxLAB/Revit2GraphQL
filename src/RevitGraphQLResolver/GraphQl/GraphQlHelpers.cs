@@ -1,4 +1,5 @@
-﻿using GraphQL.Language.AST;
+﻿using GraphQL;
+using GraphQL.Language.AST;
 using GraphQL.Types;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace RevitGraphQLResolver.GraphQL
     {
         public static List<string> GetArgumentStrings(Field aField, string name)
         {
-            var nameFilterArgument = aField.Arguments.FirstOrDefault(x => x.Name == name);
+            var nameFilterArgument = aField.Arguments?.FirstOrDefault(x => x.Name == name);
             List<string> nameFilterStrings = new List<string>();
             if (nameFilterArgument != null)
             {
@@ -19,7 +20,7 @@ namespace RevitGraphQLResolver.GraphQL
         }
         public static double GetArgumentDouble(Field aField, string name)
         {
-            var nameFilterArgument = aField.Arguments.FirstOrDefault(x => x.Name == name);
+            var nameFilterArgument = aField.Arguments?.FirstOrDefault(x => x.Name == name);
             double argumentValueDouble = 0;
             if (nameFilterArgument != null)
             {
@@ -31,7 +32,7 @@ namespace RevitGraphQLResolver.GraphQL
         {
             return aField.SelectionSet.Children.FirstOrDefault(x => (x as Field).Name == name) as Field;
         }
-        public static Field GetFieldFromContext(ResolveFieldContext context, string name)
+        public static Field GetFieldFromContext(IResolveFieldContext context, string name)
         {
             return context.SubFields.FirstOrDefault(x => x.Key == name).Value as Field;
         }

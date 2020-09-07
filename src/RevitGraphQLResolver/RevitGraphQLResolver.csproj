@@ -12,7 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="GraphQL" Version="2.4.0" />
+    <PackageReference Include="GraphQL" Version="3.0.0" />
+    <PackageReference Include="GraphQL.SystemTextJson" Version="3.0.0" />
     <PackageReference Include="RevitTask" Version="3.0.0" />
   </ItemGroup>
 

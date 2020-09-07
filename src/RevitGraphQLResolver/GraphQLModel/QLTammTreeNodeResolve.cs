@@ -1,20 +1,17 @@
-﻿using Newtonsoft.Json.Linq;
-using RevitGraphQLSchema.GraphQLModel;
-using System;
+﻿using RevitGraphQLSchema.GraphQLModel;
 using System.Collections.Generic;
-using System.Text;
-using TraverseAllSystems;
+using System.Text.Json;
 
 namespace RevitGraphQLResolver.GraphQLModel
 {
     public class QLTammTreeNodeResolve : QLTammTreeNode
     {
-        public QLTammTreeNodeResolve(JObject aJTreeNode)
+        public QLTammTreeNodeResolve(JsonElement aJTreeNode)
         {
-            id = aJTreeNode["id"].ToString();
-            text = aJTreeNode["text"].ToString();
+            id = aJTreeNode.GetProperty("id").GetString();
+            text = aJTreeNode.GetProperty("text").GetString();
             children = new List<QLTammTreeNode>();
-            foreach (JObject aJChild in (aJTreeNode["children"] as JArray))
+            foreach (JsonElement aJChild in (aJTreeNode.GetProperty("children").EnumerateArray()))
             {
                 children.Add(new QLTammTreeNodeResolve(aJChild));
             }

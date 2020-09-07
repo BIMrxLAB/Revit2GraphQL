@@ -3,6 +3,7 @@ using Autodesk.Revit.UI.Events;
 using RevitMarconiCommand.Helpers;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -58,8 +59,37 @@ namespace RevitMarconiCommand
             a.ApplicationClosing += a_ApplicationClosing; //Set Application to Idling
             a.Idling += a_Idling;
 
+            AppDomain currentDomain = AppDomain.CurrentDomain;
+
+            currentDomain.AssemblyResolve += new ResolveEventHandler(MyResolveEventHandler);
+
+
             return Result.Succeeded;
         }
+
+        private Assembly MyResolveEventHandler(object sender, ResolveEventArgs args)
+        {
+            if (args.Name.Contains("System.Buffers"))
+            {
+                string assemblyFileName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\System.Buffers.dll";
+                return Assembly.LoadFrom(assemblyFileName);
+            }
+            else if (args.Name.Contains("System.Runtime.CompilerServices.Unsafe"))
+            {
+                string assemblyFileName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\System.Runtime.CompilerServices.Unsafe.dll";
+                return Assembly.LoadFrom(assemblyFileName);
+            }
+            else if (args.Name.Contains("System.Threading.Tasks.Extensions"))
+            {
+                string assemblyFileName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\System.Threading.Tasks.Extensions.dll";
+                return Assembly.LoadFrom(assemblyFileName);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
 
         /// <summary>
         /// What to do when the application is shut down.

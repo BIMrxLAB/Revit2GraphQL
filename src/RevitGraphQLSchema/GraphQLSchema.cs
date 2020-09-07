@@ -82,33 +82,12 @@
 
             type Query {
                 hello: String
-            }
-
-            type Query {
                 sheets: [String]
-            }
-
-            type Query {
                 phases: [String]
-            }
-
-            type Query {
                 qlMepSystems(nameFilter: [String]): [QLMepSystem]
-            }
-
-            type Query {
                 qlAssemblies(nameFilter: [String]): [QLAssembly]
-            }
-
-            type Query {
                 qlViewSchedules(nameFilter: [String]): [QLViewSchedule]
-            }
-
-            type Query {
                 qlFamilyCategories(nameFilter: [String]): [QLFamilyCategory]
-            }
-
-            type Query {
                 qlFamilies(nameFilter: [String]): [QLFamily]
             }
 
