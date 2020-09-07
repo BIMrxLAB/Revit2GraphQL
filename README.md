@@ -12,13 +12,15 @@ The current repo includes projects for 2 individual Revit addins:
 
 ## Getting Started: Nuget Dance and Versioning
 
-Personally, I always love to get latest. When Nuget suggests consolidations or updates I usually go for it. Unfortunately, this is not possible here. The main components that make this project work are described below. 
+Personally, I always love to get latest. When Nuget suggests consolidations or updates I usually go for it. ~~Unfortunately, this is not possible here.~~ The main components that make this project work are described below. 
 
 Here is what we know should not be updated:
 
-1) GraphQL-Parser - leave it at 3.0.0, which otherwise breakes GraphQL
+1) ~~GraphQL-Parser - leave it at 3.0.0, which otherwise breakes GraphQL
 2) System.Diagnostics.DiagnosticSource - leave it at 4.5.1, which otherwise breakes ServiceBus
-3) Newtonsoft.Json - it's a bit of a mess. You want to go low for Revit, and you can't go too high for GraphQL. GraphQL is actively trying to loose the Newtonsoft.Json dependency.
+3) ~~Newtonsoft.Json - it's a bit of a mess. You want to go low for Revit, and you can't go too high for GraphQL. GraphQL is actively trying to loose the Newtonsoft.Json dependency.
+
+Update as of 9/6/2020: The upgrade to GraphQL for .NET 3.0 enabled us to ditch a lot of Newtonsoft.Json references and go with System.Text.Json instead. This is making it a lot easier to life side by side with Revit. The last required Newtonsoft references are with the Microsoft.AspNet.WebApi.Client (requires 6.0.4) and Microsoft.Azure.ServiceBus (requires 10.0.3).
 
 ### Shared Infrastructure
 
@@ -28,13 +30,13 @@ The Schema and the Resolver are both .NET Standard 2.0 projects. We're using .NE
 
 The Schema defines the various GraphQL object types and holds interfaces for queries and mutations. 
 
-It's sole dependency should be GraphQL 2.4.0.
+It's sole dependency should be GraphQL ~~2.4.0.~~ 3.0.0
 
 #### RevitGraphQLResolver
 
 The Resolver is where GraphQL queries are received and resolved against the Revit API. 
 
-Dependencies include GraphQL 2.4.0 and the very awesome WhiteShareq RevitTask 3.0.0.
+Dependencies include GraphQL ~~2.4.0.~~ 3.0.0, GraphQL.SystemTextJson 3.0.0, and the very awesome WhiteShareq RevitTask 3.0.0.
 
 ### Local GraphQL Endpoint for Revit
 
@@ -47,19 +49,19 @@ The library basically builds a selfhosted OWIN web server with 2 controllers: a 
 1) https://braincadet.com/category/c-sharp/
 1) http://www.learnonlineasp.net/2017/10/use-owin-to-self-host-aspnet-web-api.html
 
-Dependencies include GraphQL 2.4.0, Newtonsoft.Json 12.0.3, RevitTask 3.0.0, and a bunch of OWIN and AspNet.WebApi stuff.
+Dependencies include GraphQL ~~2.4.0.~~ 3.0.0, GraphQL.SystemTextJson 3.0.0, Newtonsoft.Json ~~12.0.3~~ 6.0.4, RevitTask 3.0.0, and a bunch of OWIN and AspNet.WebApi stuff.
 
 #### RevitGraphQLCommand
 
 This is the external command that hooks into Revit and has some very minimalistic WPF UI.
 
-Dependencies include Newtonsoft.Json 9.0.1 (that's the on Revit likes), RevitTask 3.0.0, and the Owin.Host.HttpListener 4.1.0 (that one trickled over from the webserver)
+Dependencies include ~~Newtonsoft.Json 9.0.1 (that's the on Revit likes),~~ RevitTask 3.0.0, and the Owin.Host.HttpListener 4.1.0 (that one trickled over from the webserver)
 
 ### Remote GraphQL using BIMrx.Marconi
 
 This external command uses the same resolver, but doesn't build an internal webserver. Instead we use a Azure ServiceBus client to listen and respond to queries from a messaging layer that uses Azure AMQP. The schema is exposed on a web page https://marconi4revitwebapp.azurewebsites.net/ and in the Revit addin. The request and response JObjects are routed through Azure Service Bus queues.
 
-Dependencies do not include OWIN stuff. Instead, we have GraphQL 2.4.0, Newtonsoft JSON 10.0.3 (required by GraphQL, and newer versions won't work, unfortunately), RevitTask 3.0.0, and Microsoft.Azure.ServiceBus 4.1.3 together with Microsoft.Identity.Client 4.17.0.
+Dependencies do not include OWIN stuff. Instead, we have GraphQL ~~2.4.0.~~ 3.0.0, GraphQL.SystemTextJson 3.0.0, Newtonsoft JSON 10.0.3 (required by ServiceBus ~~GraphQL, and newer versions won't work, unfortunately~~), RevitTask 3.0.0, and Microsoft.Azure.ServiceBus 4.1.3 together with Microsoft.Identity.Client 4.17.0.
 
 ## GraphQL Routes and Elements
 
