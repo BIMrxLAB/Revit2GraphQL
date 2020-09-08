@@ -19,7 +19,7 @@ namespace RevitGraphQLResolver
             aRevitTask = _aRevitTask;
         }
 
-        public async Task<GraphQLExecutionResult> GetResultAsync(GraphQLQuery query)
+        public async Task<ExecutionResult> GetResultAsync(GraphQLQuery query)
         {
             var start = DateTime.UtcNow;
 
@@ -40,7 +40,7 @@ namespace RevitGraphQLResolver
 
             result.EnrichWithApolloTracing(start);
 
-            return new GraphQLExecutionResult(result.Data, result.Errors);
+            return result;
 
         }
     }
