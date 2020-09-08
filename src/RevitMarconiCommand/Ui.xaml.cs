@@ -1,5 +1,6 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using GraphQL;
 using Microsoft.Azure.ServiceBus;
 using RevitGraphQLResolver;
 using RevitGraphQLResolver.GraphQL;
@@ -211,7 +212,7 @@ namespace RevitMarconiCommand
                 // This can be done only if the queueClient is created in ReceiveMode.PeekLock mode (which is default).
                 await queueClient.CompleteAsync(message.SystemProperties.LockToken);
 
-                GraphQLExecutionResult result = null;
+                ExecutionResult result = null;
 
                 if (_marconiIsBusy)
                 {
@@ -243,7 +244,7 @@ namespace RevitMarconiCommand
 
                 try
                 {
-                    var responseMessage = new Message(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(result)))
+                    var responseMessage = new Message(Encoding.UTF8.GetBytes(await new GraphQL.SystemTextJson.DocumentWriter(true).WriteToStringAsync(result)))
                     {
                         ContentType = "application/json",
                         Label = "Response",
