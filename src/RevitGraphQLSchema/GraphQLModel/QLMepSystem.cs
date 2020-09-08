@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace RevitGraphQLSchema.GraphQLModel
+﻿namespace RevitGraphQLSchema.GraphQLModel
 {
     public class QLMepSystem
     {

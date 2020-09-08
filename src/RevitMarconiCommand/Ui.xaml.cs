@@ -227,11 +227,13 @@ namespace RevitMarconiCommand
 
                         var start = DateTime.UtcNow;
 
-                        string query = Encoding.UTF8.GetString(message.Body);
+                        string queryJsonString = Encoding.UTF8.GetString(message.Body);
 
                         ResolverEntry aEntry = new ResolverEntry(_doc, aRevitTask);
 
-                        result = await aEntry.GetResultAsync(JsonSerializer.Deserialize<GraphQLQuery>(query));
+                        GraphQLQuery graphQLQuery = JsonSerializer.Deserialize<GraphQLQuery>(queryJsonString);
+
+                        result = await aEntry.GetResultAsync(graphQLQuery);
 
                     }
                     catch (Exception e)
@@ -244,7 +246,8 @@ namespace RevitMarconiCommand
 
                 try
                 {
-                    var responseMessage = new Message(Encoding.UTF8.GetBytes(await new GraphQL.SystemTextJson.DocumentWriter(true).WriteToStringAsync(result)))
+                    var responseJson = await new GraphQL.SystemTextJson.DocumentWriter(true).WriteToStringAsync(result);
+                    var responseMessage = new Message(Encoding.UTF8.GetBytes(responseJson))
                     {
                         ContentType = "application/json",
                         Label = "Response",

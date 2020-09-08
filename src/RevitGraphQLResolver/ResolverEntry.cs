@@ -3,7 +3,6 @@ using GraphQL;
 using GraphQL.Instrumentation;
 using RevitGraphQLResolver.GraphQL;
 using System;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace RevitGraphQLResolver
@@ -22,8 +21,6 @@ namespace RevitGraphQLResolver
         public async Task<ExecutionResult> GetResultAsync(GraphQLQuery query)
         {
             var start = DateTime.UtcNow;
-
-            //GraphQLQuery query = queryJsonElement.As<GraphQLQuery>();
 
             var inputs = query.Variables.As<Inputs>();
 

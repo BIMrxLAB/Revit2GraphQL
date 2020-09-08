@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace RevitGraphQLSchema.GraphQLModel
+﻿namespace RevitGraphQLSchema.GraphQLModel
 {
     public class QLViewSchedule
     {

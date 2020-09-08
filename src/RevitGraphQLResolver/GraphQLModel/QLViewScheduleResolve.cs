@@ -1,11 +1,8 @@
 ﻿using Autodesk.Revit.DB;
 using GraphQL.Language.AST;
-using RevitGraphQLResolver.GraphQL;
 using RevitGraphQLSchema.GraphQLModel;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace RevitGraphQLResolver.GraphQLModel
 {

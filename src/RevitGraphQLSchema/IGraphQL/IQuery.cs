@@ -1,5 +1,4 @@
 ﻿using GraphQL;
-using GraphQL.Types;
 using RevitGraphQLSchema.GraphQLModel;
 using System.Collections.Generic;
 
