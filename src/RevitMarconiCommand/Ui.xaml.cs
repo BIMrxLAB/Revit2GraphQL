@@ -197,7 +197,14 @@ namespace RevitMarconiCommand
             };
 
             // Register the function that will process messages
-            queueClient.RegisterMessageHandler(ProcessMessagesAsync, messageHandlerOptions);
+            try
+            {
+                queueClient.RegisterMessageHandler(ProcessMessagesAsync, messageHandlerOptions);
+            }
+            catch(Exception e)
+            {
+                var m = e.Message;
+            }
         }
 
         private async Task ProcessMessagesAsync(Message message, CancellationToken token)
