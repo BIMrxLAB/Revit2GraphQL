@@ -14,13 +14,13 @@ namespace RevitGraphQLResolver.GraphQL
     public class Mutation : ObjectGraphType, IMutation
     {
         [GraphQLMetadata("qlParameters")]
-        public async Task<List<QLParameter>> UpdateParametersAsync(List<UpdateQLParameter> input, ResolveFieldContext context)
+        public List<QLParameter> UpdateParameters(List<UpdateQLParameter> input, IResolveFieldContext context)
         {
 
             var _doc = ResolverEntry.Doc;
             var responseObject = new List<QLParameter>();
 
-            await ResolverEntry.aRevitTask.Run(app =>
+            ResolverEntry.aRevitTask.Run(app =>
             {
 
                 // we need a transaction to modify the model
@@ -31,14 +31,14 @@ namespace RevitGraphQLResolver.GraphQL
                     foreach (var aUpdateParameter in input)
                     {
                         FamilyInstance aFamilyInstance = new FilteredElementCollector(_doc).OfClass(typeof(FamilyInstance))
-                            .Select(x => (x as FamilyInstance)).FirstOrDefault(x => x.Id.ToString() == aUpdateParameter.InstanceId);
-                        var aOne = _doc.GetElement(aUpdateParameter.InstanceId);
-                        var aTwo = _doc.GetElement(aUpdateParameter.ParameterId);
+                            .Select(x => (x as FamilyInstance)).FirstOrDefault(x => x.Id.ToString() == aUpdateParameter.instanceId);
+                        var aOne = _doc.GetElement(aUpdateParameter.instanceId);
+                        var aTwo = _doc.GetElement(aUpdateParameter.parameterId);
                         if (aFamilyInstance != null)
                         {
                             foreach (Parameter aParameter in aFamilyInstance.Parameters)
                             {
-                                if (aParameter.Id.ToString() == aUpdateParameter.ParameterId)
+                                if (aParameter.Id.ToString() == aUpdateParameter.parameterId)
                                 {
                                     if (!aParameter.IsReadOnly)
                                     {
@@ -48,16 +48,16 @@ namespace RevitGraphQLResolver.GraphQL
                                             case StorageType.None:
                                                 break;
                                             case StorageType.Integer:
-                                                setSuccess = aParameter.Set(int.Parse(aUpdateParameter.UpdateValue));
+                                                setSuccess = aParameter.Set(int.Parse(aUpdateParameter.updateValue));
                                                 break;
                                             case StorageType.Double:
-                                                setSuccess = aParameter.Set(double.Parse(aUpdateParameter.UpdateValue));
+                                                setSuccess = aParameter.Set(double.Parse(aUpdateParameter.updateValue));
                                                 break;
                                             case StorageType.String:
-                                                setSuccess = aParameter.Set(aUpdateParameter.UpdateValue);
+                                                setSuccess = aParameter.Set(aUpdateParameter.updateValue);
                                                 break;
                                             case StorageType.ElementId:
-                                                setSuccess = aParameter.Set(new ElementId(int.Parse(aUpdateParameter.UpdateValue)));
+                                                setSuccess = aParameter.Set(new ElementId(int.Parse(aUpdateParameter.updateValue)));
                                                 break;
                                             default:
                                                 break;

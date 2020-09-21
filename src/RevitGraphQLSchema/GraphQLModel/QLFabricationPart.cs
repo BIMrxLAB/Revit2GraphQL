@@ -2,7 +2,7 @@
 
 namespace RevitGraphQLSchema.GraphQLModel
 {
-    public class QLFamilyInstance
+    public class QLFabricationPart
     {
         public string id { get; set; }
         public string name { get; set; }

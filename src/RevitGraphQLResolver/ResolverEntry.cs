@@ -1,9 +1,9 @@
 ﻿using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
 using GraphQL;
 using GraphQL.Instrumentation;
 using RevitGraphQLResolver.GraphQL;
 using System;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace RevitGraphQLResolver
@@ -11,19 +11,20 @@ namespace RevitGraphQLResolver
     public class ResolverEntry
     {
         public static Document Doc { get; set; }
+        public static UIDocument UiDoc { get; set; }
+
         public static RevitTask aRevitTask;
 
-        public ResolverEntry(Document _doc, RevitTask _aRevitTask)
+        public ResolverEntry(Document _doc, UIDocument _uidoc, RevitTask _aRevitTask)
         {
             Doc = _doc;
+            UiDoc = _uidoc;
             aRevitTask = _aRevitTask;
         }
 
         public async Task<ExecutionResult> GetResultAsync(GraphQLQuery query)
         {
             var start = DateTime.UtcNow;
-
-            //GraphQLQuery query = queryJsonElement.As<GraphQLQuery>();
 
             var inputs = query.Variables.As<Inputs>();
 

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace RevitGraphQLSchema.GraphQLModel
 {
@@ -10,6 +8,10 @@ namespace RevitGraphQLSchema.GraphQLModel
         public string name { get; set; }
 
         public bool hasViews { get; set; }
+
+        public List<QLFamilyInstance> qlFamilyInstances { get; set; }
+        public List<QLFabricationPart> qlFabricationParts { get; set; }
+
 
     }
 }

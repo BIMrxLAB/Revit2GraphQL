@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace RevitGraphQLSchema.GraphQLModel
+﻿namespace RevitGraphQLSchema.GraphQLModel
 {
     public class UpdateQLParameter
     {
-        public string InstanceId { get; set; }
-        public string ParameterId { get; set; }
-        public string UpdateValue { get; set; }
+        public string instanceId { get; set; }
+        public string parameterId { get; set; }
+        public string updateValue { get; set; }
     }
 }

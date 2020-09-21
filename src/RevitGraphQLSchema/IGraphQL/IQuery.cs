@@ -1,5 +1,4 @@
 ﻿using GraphQL;
-using GraphQL.Types;
 using RevitGraphQLSchema.GraphQLModel;
 using System.Collections.Generic;
 
@@ -29,6 +28,9 @@ namespace RevitGraphQLSchema.IGraphQl
 
         [GraphQLMetadata("qlAssemblies")]
         List<QLAssembly> GetAssemblies(IResolveFieldContext context, string[] nameFilter = null);
+
+        [GraphQLMetadata("qlSelectionFamilyInstances")]
+        List<QLFamilyInstance> GetSelection(IResolveFieldContext context, string[] nameFilter = null);
 
 
     }

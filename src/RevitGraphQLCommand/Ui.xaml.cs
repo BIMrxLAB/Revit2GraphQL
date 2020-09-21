@@ -35,7 +35,7 @@ namespace RevitGraphQLCommand
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            aWebServer = new WebServer("localhost", txtPort.Text, _doc, aRevitTask);
+            aWebServer = new WebServer("localhost", txtPort.Text, _doc, _uiDoc, aRevitTask);
             aWebServer.Start();
         }
 
