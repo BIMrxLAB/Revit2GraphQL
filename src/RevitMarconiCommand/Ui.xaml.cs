@@ -236,7 +236,7 @@ namespace RevitMarconiCommand
 
                         string queryJsonString = Encoding.UTF8.GetString(message.Body);
 
-                        ResolverEntry aEntry = new ResolverEntry(_doc, aRevitTask);
+                        ResolverEntry aEntry = new ResolverEntry(_doc, _uiDoc, aRevitTask);
 
                         GraphQLQuery graphQLQuery = JsonSerializer.Deserialize<GraphQLQuery>(queryJsonString);
 

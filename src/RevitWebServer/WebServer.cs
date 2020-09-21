@@ -21,18 +21,20 @@ namespace RevitWebServer
         public static bool isBusy = false;
 
         public static Document Doc;
+        public static UIDocument UIDoc;
         public static ExternalEvent exEvent;
         public static RevitTask aRevitTask;
 
         private IDisposable _server = null;
 
-        public WebServer(string _host, string _port, Document _doc, RevitTask _aRevitTask)
+        public WebServer(string _host, string _port, Document _doc, UIDocument _uidoc, RevitTask _aRevitTask)
         {
             Host = _host;
             Port = _port;
             BaseUrl = string.Format("http://{0}:{1}/", Host, Port);
 
             Doc = _doc;
+            UIDoc = _uidoc;
             aRevitTask = _aRevitTask;
         }
         public void Start()

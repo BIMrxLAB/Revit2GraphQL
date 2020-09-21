@@ -42,6 +42,14 @@ type QLFamilyInstance{
 	): [QLParameter]
 }
 
+type QLFabricationPart{
+	id: String
+	name: String
+	qlParameters(
+		nameFilter: [String] = []
+	): [QLParameter]
+}
+
 type QLParameter{
 	id: String
 	name: String
@@ -89,6 +97,12 @@ type QLAssembly{
 	id: String
 	name: String
 	hasViews: Boolean
+	qlFamilyInstances(
+		nameFilter: [String] = []
+	): [QLFamilyInstance]
+	qlFabricationParts(
+		nameFilter: [String] = []
+	): [QLFabricationPart]
 }
 
 type Query{
@@ -110,6 +124,9 @@ type Query{
 	qlFamilies(
 		nameFilter: [String] = []
 	): [QLFamily]
+	qlSelectionFamilyInstances(
+		nameFilter: [String] = []
+	): [QLFamilyInstance]
 }
 
 type Mutation{

@@ -1,4 +1,5 @@
 ﻿using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
 using GraphQL;
 using GraphQL.Instrumentation;
 using RevitGraphQLResolver.GraphQL;
@@ -10,11 +11,14 @@ namespace RevitGraphQLResolver
     public class ResolverEntry
     {
         public static Document Doc { get; set; }
+        public static UIDocument UiDoc { get; set; }
+
         public static RevitTask aRevitTask;
 
-        public ResolverEntry(Document _doc, RevitTask _aRevitTask)
+        public ResolverEntry(Document _doc, UIDocument _uidoc, RevitTask _aRevitTask)
         {
             Doc = _doc;
+            UiDoc = _uidoc;
             aRevitTask = _aRevitTask;
         }
 
