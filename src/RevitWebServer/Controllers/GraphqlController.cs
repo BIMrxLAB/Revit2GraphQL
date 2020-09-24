@@ -27,7 +27,7 @@ namespace RevitWebServer.Controllers
             var result = new ExecutionResult();
             if (WebServer.isBusy)
             {
-
+                if (result.Errors == null) result.Errors = new ExecutionErrors();
                 result.Errors.Add(new ExecutionError("Service is busy..."));
 
             }

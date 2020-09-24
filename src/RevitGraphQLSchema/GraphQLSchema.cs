@@ -105,6 +105,14 @@ type QLAssembly{
 	): [QLFabricationPart]
 }
 
+type QLFabricationService{
+	id: String
+	name: String
+	qlFabricationParts(
+		nameFilter: [String] = []
+	): [QLFabricationPart]
+}
+
 type Query{
 	hello: String
 	sheets: [String]
@@ -115,6 +123,9 @@ type Query{
 	qlAssemblies(
 		nameFilter: [String] = []
 	): [QLAssembly]
+	qlFabricationServices(
+		nameFilter: [String] = []
+	): [QLFabricationService]
 	qlViewSchedules(
 		nameFilter: [String] = []
 	): [QLViewSchedule]

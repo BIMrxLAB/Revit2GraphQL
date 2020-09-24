@@ -231,5 +231,40 @@ namespace RevitGraphQLResolver.GraphQL
             return returnObject.OrderBy(x => x.name).ToList();
 
         }
+
+        [GraphQLMetadata("qlFabricationServices")]
+        public List<QLFabricationService> GetFabServices(IResolveFieldContext context, string[] nameFilter = null)
+        {
+
+            Document _doc = ResolverEntry.Doc;
+
+            var stuff = ResolverEntry.aRevitTask.Run<List<QLFabricationService>>(app =>
+            {
+
+
+                var fabricationConfiguration = FabricationConfiguration.GetFabricationConfiguration(_doc);
+                var objectList = fabricationConfiguration.GetAllServices();
+
+                var nameFilterStrings = nameFilter != null ? nameFilter.ToList() : new List<string>();
+                var qlFabricationPartsField = GraphQlHelpers.GetFieldFromContext(context, "qlFabricationParts");
+
+
+                var returnObject = new ConcurrentBag<QLFabricationService>();
+
+                //Parallel.ForEach(stringList, aFamilyCategoryName =>
+                foreach (var aFabricationService in objectList)
+                {
+                    if (nameFilterStrings.Count == 0 || nameFilterStrings.Contains(aFabricationService.Name))
+                    {
+                        var qlFabricationService = new QLFabricationServiceResolve(aFabricationService, qlFabricationPartsField);
+                        returnObject.Add(qlFabricationService);
+                    }
+                }
+                return returnObject.OrderBy(x => x.name).ToList();
+            }).Result;
+
+            return stuff;
+        }
+
     }
 }
