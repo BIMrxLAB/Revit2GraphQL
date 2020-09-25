@@ -9,8 +9,7 @@ namespace RevitGraphQLSchema.GraphQLModel
 
         public bool hasViews { get; set; }
 
-        public List<QLFamilyInstance> qlFamilyInstances { get; set; }
-        public List<QLFabricationPart> qlFabricationParts { get; set; }
+        public QLElementCollection qlElementCollection { get; set; }
 
 
     }
