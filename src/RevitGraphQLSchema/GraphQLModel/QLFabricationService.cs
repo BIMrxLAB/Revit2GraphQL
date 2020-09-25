@@ -2,15 +2,11 @@
 
 namespace RevitGraphQLSchema.GraphQLModel
 {
-    public class QLAssembly
+    public class QLFabricationService
     {
         public string id { get; set; }
         public string name { get; set; }
 
-        public bool hasViews { get; set; }
-
-        public QLElementCollection qlElementCollection { get; set; }
-
-
+        public List<QLFabricationPart> qlFabricationParts { get; set; }
     }
 }

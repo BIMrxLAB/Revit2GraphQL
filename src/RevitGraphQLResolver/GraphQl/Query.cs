@@ -104,36 +104,20 @@ namespace RevitGraphQLResolver.GraphQL
 
         }
 
-        [GraphQLMetadata("qlSelectionFamilyInstances")]
-        public List<QLFamilyInstance> GetSelection(IResolveFieldContext context, string[] nameFilter = null)
+        [GraphQLMetadata("qlElementSelection")]
+        public QLElementCollection GetSelection(IResolveFieldContext context, string[] nameFilter = null)
         {
             Document _doc = ResolverEntry.Doc;
             UIDocument _uidoc = ResolverEntry.UiDoc;
 
             Selection selection = _uidoc.Selection;
-            ICollection<ElementId> selectedIds = selection.GetElementIds();
+            var qlFamilyInstancesField = GraphQlHelpers.GetFieldFromContext(context, "qlFamilyInstances");
+            var qlFabricationPartsField = GraphQlHelpers.GetFieldFromContext(context, "qlFabricationParts");
 
-            var returnElementsObject = new ConcurrentBag<QLFamilyInstance>();
-
-            var nameFilterStrings = nameFilter != null ? nameFilter.ToList() : new List<string>();
-            var queryFieldForParameters = GraphQlHelpers.GetFieldFromContext(context, "qlParameters");
-
-            foreach (var aId in selectedIds)
-            {
-                var aElement = _doc.GetElement(aId);
-                if(aElement is FamilyInstance)
-                {
-                    var x = aElement as FamilyInstance;
-                    if (nameFilterStrings.Count == 0 || nameFilterStrings.Contains(x.Name))
-                    {
-                        returnElementsObject.Add(new QLFamilyInstanceResolve(x, queryFieldForParameters));
-                    }
-                }
-            }
-
-            List<QLFamilyInstance> qlFamilyInstances = returnElementsObject.OrderBy(x => x.name).ToList();
-
-            return qlFamilyInstances;
+            ICollection<ElementId> elementIds = selection.GetElementIds();
+            QLElementCollection qlElementCollection = new QLElementCollectionResolve(elementIds, qlFamilyInstancesField, qlFabricationPartsField);
+            
+            return qlElementCollection;
         }
 
         [GraphQLMetadata("qlFamilyCategories")]
@@ -205,8 +189,7 @@ namespace RevitGraphQLResolver.GraphQL
 
             var nameFilterStrings = nameFilter != null ? nameFilter.ToList() : new List<string>();            
             var qlFieldViews = GraphQlHelpers.GetFieldFromContext(context, "hasViews");
-            var qlFamilyInstancesField = GraphQlHelpers.GetFieldFromContext(context, "qlFamilyInstances");
-            var qlFabricationPartsField = GraphQlHelpers.GetFieldFromContext(context, "qlFabricationParts");
+            var qlElementCollectionField = GraphQlHelpers.GetFieldFromContext(context, "qlElementCollection");
 
             List<View> viewListing = null;
             if (qlFieldViews!=null)
@@ -224,12 +207,47 @@ namespace RevitGraphQLResolver.GraphQL
             {
                 if (nameFilterStrings.Count == 0 || nameFilterStrings.Contains(aAssembly.Name))
                 {
-                    var qlMepSystem = new QLAssemblyResolve(aAssembly, qlFieldViews, viewListing, qlFamilyInstancesField, qlFabricationPartsField);
+                    var qlMepSystem = new QLAssemblyResolve(aAssembly, qlFieldViews, viewListing, qlElementCollectionField);
                     returnObject.Add(qlMepSystem);
                 }
             }
             return returnObject.OrderBy(x => x.name).ToList();
 
         }
+
+        [GraphQLMetadata("qlFabricationServices")]
+        public List<QLFabricationService> GetFabServices(IResolveFieldContext context, string[] nameFilter = null)
+        {
+
+            Document _doc = ResolverEntry.Doc;
+
+            var stuff = ResolverEntry.aRevitTask.Run<List<QLFabricationService>>(app =>
+            {
+
+
+                var fabricationConfiguration = FabricationConfiguration.GetFabricationConfiguration(_doc);
+                var objectList = fabricationConfiguration.GetAllServices();
+
+                var nameFilterStrings = nameFilter != null ? nameFilter.ToList() : new List<string>();
+                var qlFabricationPartsField = GraphQlHelpers.GetFieldFromContext(context, "qlFabricationParts");
+
+
+                var returnObject = new ConcurrentBag<QLFabricationService>();
+
+                //Parallel.ForEach(stringList, aFamilyCategoryName =>
+                foreach (var aFabricationService in objectList)
+                {
+                    if (nameFilterStrings.Count == 0 || nameFilterStrings.Contains(aFabricationService.Name))
+                    {
+                        var qlFabricationService = new QLFabricationServiceResolve(aFabricationService, qlFabricationPartsField);
+                        returnObject.Add(qlFabricationService);
+                    }
+                }
+                return returnObject.OrderBy(x => x.name).ToList();
+            }).Result;
+
+            return stuff;
+        }
+
     }
 }

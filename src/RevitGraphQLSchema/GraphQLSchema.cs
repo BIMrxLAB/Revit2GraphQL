@@ -93,13 +93,26 @@ type QLTammTreeNode{
 	children: [QLTammTreeNode]
 }
 
+type QLElementCollection{
+	elementIds: [String]
+	qlFamilyInstances(
+		nameFilter: [String] = []
+	): [QLFamilyInstance]
+	qlFabricationParts(
+		nameFilter: [String] = []
+	): [QLFabricationPart]
+}
+
 type QLAssembly{
 	id: String
 	name: String
 	hasViews: Boolean
-	qlFamilyInstances(
-		nameFilter: [String] = []
-	): [QLFamilyInstance]
+	qlElementCollection: QLElementCollection
+}
+
+type QLFabricationService{
+	id: String
+	name: String
 	qlFabricationParts(
 		nameFilter: [String] = []
 	): [QLFabricationPart]
@@ -115,6 +128,9 @@ type Query{
 	qlAssemblies(
 		nameFilter: [String] = []
 	): [QLAssembly]
+	qlFabricationServices(
+		nameFilter: [String] = []
+	): [QLFabricationService]
 	qlViewSchedules(
 		nameFilter: [String] = []
 	): [QLViewSchedule]
@@ -124,9 +140,9 @@ type Query{
 	qlFamilies(
 		nameFilter: [String] = []
 	): [QLFamily]
-	qlSelectionFamilyInstances(
+	qlElementSelection(
 		nameFilter: [String] = []
-	): [QLFamilyInstance]
+	): QLElementCollection
 }
 
 type Mutation{

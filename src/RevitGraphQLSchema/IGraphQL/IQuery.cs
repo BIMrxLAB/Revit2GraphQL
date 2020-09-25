@@ -29,9 +29,11 @@ namespace RevitGraphQLSchema.IGraphQl
         [GraphQLMetadata("qlAssemblies")]
         List<QLAssembly> GetAssemblies(IResolveFieldContext context, string[] nameFilter = null);
 
-        [GraphQLMetadata("qlSelectionFamilyInstances")]
-        List<QLFamilyInstance> GetSelection(IResolveFieldContext context, string[] nameFilter = null);
+        [GraphQLMetadata("qlElementSelection")]
+        QLElementCollection GetSelection(IResolveFieldContext context, string[] nameFilter = null);
 
+        [GraphQLMetadata("qlFabricationServices")]
+        List<QLFabricationService> GetFabServices(IResolveFieldContext context, string[] nameFilter = null);
 
     }
 }
