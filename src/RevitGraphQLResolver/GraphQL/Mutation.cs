@@ -1,6 +1,9 @@
 ﻿using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
+using Autodesk.Revit.UI.Selection;
 using GraphQL;
 using GraphQL.Types;
+using RevitGraphQLResolver.GraphQLModel;
 using RevitGraphQLSchema.GraphQLModel;
 using RevitGraphQLSchema.IGraphQl;
 using System;
@@ -86,5 +89,40 @@ namespace RevitGraphQLResolver.GraphQL
             return responseObject;
 
         }
+
+        [GraphQLMetadata("qlElementSelection")]
+        public QLElementCollection SetSelection(List<string> input, IResolveFieldContext context)
+        {
+            Document _doc = ResolverEntry.Doc;
+            UIDocument _uidoc = ResolverEntry.UiDoc;
+
+            Selection selection = _uidoc.Selection;
+
+            ICollection<ElementId> elementIds = selection.GetElementIds();
+            elementIds.Clear();
+
+            QLElementCollection qlElementCollection = new QLElementCollection();
+            qlElementCollection.elementIds = new List<string>();
+
+            foreach(var aString in input)
+            {
+                elementIds.Add(new ElementId(int.Parse(aString)));
+                qlElementCollection.elementIds.Add(aString);
+            }
+
+
+            ResolverEntry.aRevitTask.Run(app =>
+            {
+                if (elementIds.Count > 0) selection.SetElementIds(elementIds);
+            });
+
+            //var qlFamilyInstancesField = GraphQlHelpers.GetFieldFromContext(context, "qlFamilyInstances");
+            //var qlFabricationPartsField = GraphQlHelpers.GetFieldFromContext(context, "qlFabricationParts");
+            //elementIds = selection.GetElementIds();
+            //QLElementCollection qlElementCollection = new QLElementCollectionResolve(elementIds, qlFamilyInstancesField, qlFabricationPartsField);
+
+            return qlElementCollection;
+        }
+
     }
 }

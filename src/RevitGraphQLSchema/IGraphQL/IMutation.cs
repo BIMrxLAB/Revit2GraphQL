@@ -8,5 +8,6 @@ namespace RevitGraphQLSchema.IGraphQl
     {
         List<QLParameter> UpdateParameters(List<UpdateQLParameter> input, IResolveFieldContext context);
 
+        QLElementCollection SetSelection(List<string> input, IResolveFieldContext context);
     }
 }
