@@ -8,7 +8,7 @@
     <Compile Remove="GraphQLModel\IQLFamily.cs" />
     <Compile Remove="GraphQLModel\IQLFamilyCategory.cs" />
     <Compile Remove="GraphQLModel\IQLFamilySymbol.cs" />
-    <Compile Remove="GraphQL_\IQuery.cs" />
+    <Compile Remove="GraphQL\IQuery.cs" />
   </ItemGroup>
 
   <ItemGroup>
