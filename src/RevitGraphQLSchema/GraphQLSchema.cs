@@ -149,6 +149,9 @@ type Mutation{
 	qlParameters(
 		input: [UpdateQLParameter] = []
 	): [QLParameter]
+	qlElementSelection(
+		input: [String] = []
+	): QLElementCollection
 }
 schema{
 	query: Query,
