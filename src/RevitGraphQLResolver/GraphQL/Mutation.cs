@@ -112,10 +112,10 @@ namespace RevitGraphQLResolver.GraphQL
                 if (elementIds.Count > 0) selection.SetElementIds(elementIds);
             });
 
-            var qlFamilyInstancesField = GraphQlHelpers.GetFieldFromContext(context, "qlFamilyInstances");
-            var qlFabricationPartsField = GraphQlHelpers.GetFieldFromContext(context, "qlFabricationParts");
+            //var qlFamilyInstancesField = GraphQlHelpers.GetFieldFromContext(context, "qlFamilyInstances");
+            //var qlFabricationPartsField = GraphQlHelpers.GetFieldFromContext(context, "qlFabricationParts");
 
-            QLElementCollection qlElementCollection = new QLElementCollectionResolve(elementIds, qlFamilyInstancesField, qlFabricationPartsField);
+            QLElementCollection qlElementCollection = new QLElementCollectionResolve(elementIds, context);
 
             return qlElementCollection;
         }

@@ -11,10 +11,12 @@ namespace RevitGraphQLResolver.GraphQLModel
     public class QLFamilySymbolResolve: QLFamilySymbol 
     {
         
-        public QLFamilySymbolResolve(FamilySymbol _familySymbol, Field queryFieldForFamilyInstances)
+        public QLFamilySymbolResolve(FamilySymbol _familySymbol, object aFieldOrContext)
         {
             id = _familySymbol.Id.ToString();
             name = _familySymbol.Name;
+
+            var queryFieldForFamilyInstances = GraphQlHelpers.GetFieldFromFieldOrContext(aFieldOrContext, "qlFamilyInstances");
 
             if (queryFieldForFamilyInstances != null)
             {
@@ -22,7 +24,7 @@ namespace RevitGraphQLResolver.GraphQLModel
                 var returnElementsObject = new ConcurrentBag<QLFamilyInstance>();
 
                 var nameFiltersContained = GraphQlHelpers.GetArgumentStrings(queryFieldForFamilyInstances, "nameFilter");
-                var queryFieldForParameters = GraphQlHelpers.GetFieldFromSelectionSet(queryFieldForFamilyInstances, "qlParameters");
+                //var queryFieldForParameters = GraphQlHelpers.GetFieldFromSelectionSet(queryFieldForFamilyInstances, "qlParameters");
 
                 var _doc = ResolverEntry.Doc;
                 List<FamilyInstance> objectList = new FilteredElementCollector(_doc).OfClass(typeof(FamilyInstance))
@@ -33,7 +35,7 @@ namespace RevitGraphQLResolver.GraphQLModel
                 {
                     if (nameFiltersContained.Count == 0 || nameFiltersContained.Contains(x.Name))
                     {
-                        returnElementsObject.Add(new QLFamilyInstanceResolve(x, queryFieldForParameters));
+                        returnElementsObject.Add(new QLFamilyInstanceResolve(x, queryFieldForFamilyInstances));
                     }
                 }
 
