@@ -27,14 +27,28 @@ namespace RevitGraphQLResolver.GraphQL
             }
             return argumentValueDouble;
         }
-        public static Field GetFieldFromSelectionSet(Field aField, string name)
-        {
-            return aField.SelectionSet.Children.FirstOrDefault(x => (x as Field).Name == name) as Field;
-        }
-        public static Field GetFieldFromContext(IResolveFieldContext context, string name)
-        {
-            return context.SubFields.FirstOrDefault(x => x.Key == name).Value as Field;
-        }
 
+        //public static Field GetFieldFromSelectionSet(Field aField, string name)
+        //{
+        //    return aField.SelectionSet.Children.FirstOrDefault(x => (x as Field).Name == name) as Field;
+        //}
+        //public static Field GetFieldFromContext(IResolveFieldContext context, string name)
+        //{
+        //    return context.SubFields.FirstOrDefault(x => x.Key == name).Value as Field;
+        //}
+
+        public static Field GetFieldFromFieldOrContext(object aFieldOrContext, string name)
+        {
+            //https://systemoutofmemory.com/blogs/the-programmer-blog/c-sharp-switch-on-type
+            switch (aFieldOrContext)
+            {
+                case Field aField:
+                    return aField.SelectionSet.Children.FirstOrDefault(x => (x as Field).Name == name) as Field;
+                case IResolveFieldContext aContext:
+                    return aContext.SubFields.FirstOrDefault(x => x.Key == name).Value as Field;
+                default:
+                    return null;
+            }
+        }
     }
 }

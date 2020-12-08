@@ -61,7 +61,7 @@ namespace RevitGraphQLResolver.GraphQL
             var scheduleList = new FilteredElementCollector(_doc).OfClass(typeof(ViewSchedule)).Select(p => (ViewSchedule)p).Where(x=>!x.Name.Contains("Revision Schedule")).ToList();
 
             var nameFilterStrings = nameFilter != null ? nameFilter.ToList() : new List<string>();
-            var qlViewScheduleData = GraphQlHelpers.GetFieldFromContext(context, "qlViewScheduleData");
+            //var qlViewScheduleData = GraphQlHelpers.GetFieldFromContext(context, "qlViewScheduleData");
 
             var returnObject = new ConcurrentBag<QLViewSchedule>();
 
@@ -70,7 +70,7 @@ namespace RevitGraphQLResolver.GraphQL
             {
                 if (nameFilterStrings.Count == 0 || nameFilterStrings.Contains(aViewSchedule.Name))
                 {
-                    var qlViewScheudle = new QLViewScheduleResolve(aViewSchedule, qlViewScheduleData);
+                    var qlViewScheudle = new QLViewScheduleResolve(aViewSchedule, context);
                     returnObject.Add(qlViewScheudle);
                 }
             }
@@ -86,8 +86,8 @@ namespace RevitGraphQLResolver.GraphQL
             List<Family> objectList = new FilteredElementCollector(_doc).OfClass(typeof(Family)).Select(x => (x as Family)).ToList();
 
             var nameFilterStrings = nameFilter != null ? nameFilter.ToList() : new List<string>();
-            var qlFamilySymbolsField = GraphQlHelpers.GetFieldFromContext(context, "qlFamilySymbols");
-            var qlFamilyInstancesField = GraphQlHelpers.GetFieldFromContext(context, "qlFamilyInstances");
+            //var qlFamilySymbolsField = GraphQlHelpers.GetFieldFromContext(context, "qlFamilySymbols");
+            //var qlFamilyInstancesField = GraphQlHelpers.GetFieldFromContext(context, "qlFamilyInstances");
 
             var returnObject = new ConcurrentBag<QLFamily>();
 
@@ -96,7 +96,8 @@ namespace RevitGraphQLResolver.GraphQL
             {
                 if (nameFilterStrings.Count == 0 || nameFilterStrings.Contains(aFamily.Name))
                 {
-                    var qlFamily = new QLFamilyResolve(aFamily, qlFamilySymbolsField, qlFamilyInstancesField);
+                    //var qlFamily = new QLFamilyResolve(aFamily, qlFamilySymbolsField, qlFamilyInstancesField);
+                    var qlFamily = new QLFamilyResolve(aFamily, context);
                     returnObject.Add(qlFamily);
                 }
             }
@@ -111,11 +112,12 @@ namespace RevitGraphQLResolver.GraphQL
             UIDocument _uidoc = ResolverEntry.UiDoc;
 
             Selection selection = _uidoc.Selection;
-            var qlFamilyInstancesField = GraphQlHelpers.GetFieldFromContext(context, "qlFamilyInstances");
-            var qlFabricationPartsField = GraphQlHelpers.GetFieldFromContext(context, "qlFabricationParts");
+            //var qlFamilyInstancesField = GraphQlHelpers.GetFieldFromContext(context, "qlFamilyInstances");
+            //var qlFabricationPartsField = GraphQlHelpers.GetFieldFromContext(context, "qlFabricationParts");
 
             ICollection<ElementId> elementIds = selection.GetElementIds();
-            QLElementCollection qlElementCollection = new QLElementCollectionResolve(elementIds, qlFamilyInstancesField, qlFabricationPartsField);
+            //QLElementCollection qlElementCollection = new QLElementCollectionResolve(elementIds, qlFamilyInstancesField, qlFabricationPartsField);
+            QLElementCollection qlElementCollection = new QLElementCollectionResolve(elementIds, context);
             
             return qlElementCollection;
         }
@@ -132,8 +134,8 @@ namespace RevitGraphQLResolver.GraphQL
             //var objectList = _doc.Settings.Categories;
 
             var nameFilterStrings = nameFilter != null ? nameFilter.ToList() : new List<string>();
-            var qlFamiliesField = GraphQlHelpers.GetFieldFromContext(context, "qlFamilies");
-            var qlFamilyInstancesField = GraphQlHelpers.GetFieldFromContext(context, "qlFamilyInstances");
+            //var qlFamiliesField = GraphQlHelpers.GetFieldFromContext(context, "qlFamilies");
+            //var qlFamilyInstancesField = GraphQlHelpers.GetFieldFromContext(context, "qlFamilyInstances");
 
 
             var returnObject = new ConcurrentBag<QLFamilyCategory>();
@@ -143,7 +145,7 @@ namespace RevitGraphQLResolver.GraphQL
             {
                 if (nameFilterStrings.Count == 0 || nameFilterStrings.Contains(aCategory.Name))
                 {
-                    var qlFamilyCategory = new QLFamilyCategoryResolve(aCategory, qlFamiliesField, qlFamilyInstancesField);
+                    var qlFamilyCategory = new QLFamilyCategoryResolve(aCategory, context);
                     returnObject.Add(qlFamilyCategory);
                 }
             }
@@ -188,8 +190,8 @@ namespace RevitGraphQLResolver.GraphQL
             var objectList = new FilteredElementCollector(_doc).OfClass(typeof(AssemblyInstance)); //.Select(x=>x as MEPSystem).ToList<MEPSystem>();
 
             var nameFilterStrings = nameFilter != null ? nameFilter.ToList() : new List<string>();            
-            var qlFieldViews = GraphQlHelpers.GetFieldFromContext(context, "hasViews");
-            var qlElementCollectionField = GraphQlHelpers.GetFieldFromContext(context, "qlElementCollection");
+            var qlFieldViews = GraphQlHelpers.GetFieldFromFieldOrContext(context, "hasViews");
+            //var qlElementCollectionField = GraphQlHelpers.GetFieldFromContext(context, "qlElementCollection");
 
             List<View> viewListing = null;
             if (qlFieldViews!=null)
@@ -207,7 +209,8 @@ namespace RevitGraphQLResolver.GraphQL
             {
                 if (nameFilterStrings.Count == 0 || nameFilterStrings.Contains(aAssembly.Name))
                 {
-                    var qlMepSystem = new QLAssemblyResolve(aAssembly, qlFieldViews, viewListing, qlElementCollectionField);
+                    //var qlMepSystem = new QLAssemblyResolve(aAssembly, qlFieldViews, viewListing, qlElementCollectionField);
+                    var qlMepSystem = new QLAssemblyResolve(aAssembly, viewListing, context);
                     returnObject.Add(qlMepSystem);
                 }
             }
@@ -229,7 +232,7 @@ namespace RevitGraphQLResolver.GraphQL
                 var objectList = fabricationConfiguration.GetAllServices();
 
                 var nameFilterStrings = nameFilter != null ? nameFilter.ToList() : new List<string>();
-                var qlFabricationPartsField = GraphQlHelpers.GetFieldFromContext(context, "qlFabricationParts");
+                //var qlFabricationPartsField = GraphQlHelpers.GetFieldFromContext(context, "qlFabricationParts");
 
 
                 var returnObject = new ConcurrentBag<QLFabricationService>();
@@ -239,7 +242,7 @@ namespace RevitGraphQLResolver.GraphQL
                 {
                     if (nameFilterStrings.Count == 0 || nameFilterStrings.Contains(aFabricationService.Name))
                     {
-                        var qlFabricationService = new QLFabricationServiceResolve(aFabricationService, qlFabricationPartsField);
+                        var qlFabricationService = new QLFabricationServiceResolve(aFabricationService, context);
                         returnObject.Add(qlFabricationService);
                     }
                 }
