@@ -17,7 +17,7 @@ namespace RevitGraphQLResolver.GraphQL
     public class Mutation : ObjectGraphType, IMutation
     {
         [GraphQLMetadata("qlParameters")]
-        public List<QLParameter> UpdateParameters(List<UpdateQLParameter> input, IResolveFieldContext context)
+        public List<QLParameter> UpdateParameters(IResolveFieldContext context, List<UpdateQLParameter> input)
         {
 
             var _doc = ResolverEntry.Doc;
@@ -91,7 +91,7 @@ namespace RevitGraphQLResolver.GraphQL
         }
 
         [GraphQLMetadata("qlElementSelection")]
-        public QLElementCollection SetSelection(List<string> input, IResolveFieldContext context)
+        public QLElementCollection SetSelection(IResolveFieldContext context, List<string> input)
         {
             Document _doc = ResolverEntry.Doc;
             UIDocument _uidoc = ResolverEntry.UiDoc;
@@ -101,13 +101,9 @@ namespace RevitGraphQLResolver.GraphQL
             ICollection<ElementId> elementIds = selection.GetElementIds();
             elementIds.Clear();
 
-            QLElementCollection qlElementCollection = new QLElementCollection();
-            qlElementCollection.elementIds = new List<string>();
-
             foreach(var aString in input)
             {
                 elementIds.Add(new ElementId(int.Parse(aString)));
-                qlElementCollection.elementIds.Add(aString);
             }
 
 
@@ -116,10 +112,10 @@ namespace RevitGraphQLResolver.GraphQL
                 if (elementIds.Count > 0) selection.SetElementIds(elementIds);
             });
 
-            //var qlFamilyInstancesField = GraphQlHelpers.GetFieldFromContext(context, "qlFamilyInstances");
-            //var qlFabricationPartsField = GraphQlHelpers.GetFieldFromContext(context, "qlFabricationParts");
-            //elementIds = selection.GetElementIds();
-            //QLElementCollection qlElementCollection = new QLElementCollectionResolve(elementIds, qlFamilyInstancesField, qlFabricationPartsField);
+            var qlFamilyInstancesField = GraphQlHelpers.GetFieldFromContext(context, "qlFamilyInstances");
+            var qlFabricationPartsField = GraphQlHelpers.GetFieldFromContext(context, "qlFabricationParts");
+
+            QLElementCollection qlElementCollection = new QLElementCollectionResolve(elementIds, qlFamilyInstancesField, qlFabricationPartsField);
 
             return qlElementCollection;
         }

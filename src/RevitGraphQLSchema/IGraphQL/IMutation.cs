@@ -6,8 +6,8 @@ namespace RevitGraphQLSchema.IGraphQl
 {
     public interface IMutation
     {
-        List<QLParameter> UpdateParameters(List<UpdateQLParameter> input, IResolveFieldContext context);
+        List<QLParameter> UpdateParameters(IResolveFieldContext context, List<UpdateQLParameter> input);
 
-        QLElementCollection SetSelection(List<string> input, IResolveFieldContext context);
+        QLElementCollection SetSelection(IResolveFieldContext context, List<string> input);
     }
 }
