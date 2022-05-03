@@ -36,6 +36,7 @@ namespace RevitGraphQLSchema
             UserEmail = aToken.Claims.FirstOrDefault(x => x.Type == "emails")?.Value;
             UserName = aToken.Claims.FirstOrDefault(x => x.Type == "name")?.Value;
             UserId = aToken.Claims.FirstOrDefault(x => x.Type == "oid")?.Value;
+
         }
     }
 }
